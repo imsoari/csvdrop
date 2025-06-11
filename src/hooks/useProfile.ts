@@ -32,7 +32,6 @@ export const useProfile = () => {
     firstName: string;
     lastName: string;
     email: string;
-    kycVerified?: boolean;
     hasSeenOnboarding?: boolean;
   }) => {
     try {
@@ -50,7 +49,6 @@ export const useProfile = () => {
     firstName: string;
     lastName: string;
     email: string;
-    kycVerified: boolean;
     hasSeenOnboarding: boolean;
   }>) => {
     try {

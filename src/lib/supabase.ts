@@ -46,7 +46,6 @@ export interface UserProfile {
   first_name: string;
   last_name: string;
   email: string;
-  kyc_verified: boolean;
   has_seen_onboarding: boolean;
   created_at: string;
   updated_at: string;
@@ -205,7 +204,6 @@ export const createOrUpdateProfile = async (profileData: {
   firstName: string;
   lastName: string;
   email: string;
-  kycVerified?: boolean;
   hasSeenOnboarding?: boolean;
 }) => {
   // In mock mode, just return success
@@ -221,7 +219,6 @@ export const updateProfile = async (updates: Partial<{
   firstName: string;
   lastName: string;
   email: string;
-  kycVerified: boolean;
   hasSeenOnboarding: boolean;
 }>) => {
   // In mock mode, just return success
@@ -242,7 +239,6 @@ export const getProfile = async () => {
         first_name: 'Demo',
         last_name: 'User',
         email: 'demo@example.com',
-        kyc_verified: true,
         has_seen_onboarding: true,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()

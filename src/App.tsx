@@ -19,7 +19,7 @@ import MacLandingPage from './components/MacLandingPage';
 import MacUserDashboard from './components/MacUserDashboard';
 import MacAuthModal from './components/MacAuthModal';
 import MacOnboardingModal from './components/MacOnboardingModal';
-import MacKYCModal from './components/MacKYCModal';
+
 import MacPaymentModal from './components/MacPaymentModal';
 import MacDownloadTicket from './components/MacDownloadTicket';
 
@@ -42,7 +42,6 @@ function App() {
   
   // Play startup sound on mount
   useEffect(() => {
-    // Small delay to ensure audio context is ready
     const timer = setTimeout(() => {
       playStartup();
     }, 500);
@@ -51,7 +50,7 @@ function App() {
   }, [playStartup]);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showOnboardingModal, setShowOnboardingModal] = useState(false);
-  const [showKYCModal, setShowKYCModal] = useState(false);
+
   const [showPaymentModal, setShowPaymentModal] = useState(false);
 
   // Download state
@@ -69,7 +68,7 @@ function App() {
     const urlParams = new URLSearchParams(window.location.search);
     const showAuth = urlParams.get('auth');
     const showOnboarding = urlParams.get('onboarding');
-    const showKYC = urlParams.get('kyc');
+    // KYC removed
     const showPayment = urlParams.get('payment');
     const upgrade = urlParams.get('upgrade');
     
@@ -81,9 +80,7 @@ function App() {
       setShowOnboardingModal(true);
     }
     
-    if (showKYC === 'true') {
-      setShowKYCModal(true);
-    }
+
     
     if (showPayment === 'true') {
       setShowPaymentModal(true);
@@ -106,20 +103,11 @@ function App() {
       
       if (fromSignup) {
         setShowOnboardingModal(true);
-      } else {
-        // Existing user without profile - just show KYC
-        setShowKYCModal(true);
       }
     }
   }, [user, profile, authLoading]);
 
-  // Check if user needs KYC verification
-  const needsKYCVerification = useMemo(() => {
-    return (
-      (subscription?.type === 'pro' || subscription?.type === 'single') && 
-      !profile?.kyc_verified
-    );
-  }, [subscription, profile]);
+
 
   // Track when user changes subscription type
   useEffect(() => {
@@ -151,7 +139,6 @@ function App() {
         firstName: kycData.firstName,
         lastName: kycData.lastName,
         email: kycData.email,
-        kycVerified: false,
         hasSeenOnboarding: true
       });
       
@@ -159,28 +146,10 @@ function App() {
       analytics.track('Onboarding Completed', kycData);
     }
     
-    // Check if user needs KYC verification
-    if (needsKYCVerification) {
-      setShowKYCModal(true);
-    }
+
   };
 
-  const handleKYCComplete = async (kycData: { firstName: string; lastName: string; email: string }) => {
-    setShowKYCModal(false);
-    playSuccess();
-    
-    // Create or update profile with KYC data
-    await createProfile({
-      firstName: kycData.firstName,
-      lastName: kycData.lastName,
-      email: kycData.email,
-      kycVerified: true,
-      hasSeenOnboarding: profile?.has_seen_onboarding || true
-    });
-    
-    // Track KYC completion
-    analytics.track('KYC Verification Completed', kycData);
-  };
+
 
   const handlePaymentSuccess = (data: any) => {
     setShowPaymentModal(false);
@@ -247,8 +216,8 @@ function App() {
           onClose={() => {
             setShowAuthModal(false);
             playClick();
+            handleAuthSuccess();
           }}
-          onSuccess={handleAuthSuccess}
           playSuccess={playSuccess}
           playError={playError}
           playClick={playClick}
@@ -266,17 +235,7 @@ function App() {
           playClick={playClick}
         />
 
-        {/* Only show KYC modal for users who need verification and don't have a profile yet */}
-        <MacKYCModal
-          isOpen={showKYCModal}
-          onClose={() => {
-            setShowKYCModal(false);
-            playClick();
-          }}
-          onKYCComplete={handleKYCComplete}
-          userType={subscription?.type || 'free'}
-          playClick={playClick}
-        />
+
 
         <MacPaymentModal
           isOpen={showPaymentModal}
@@ -301,6 +260,9 @@ function App() {
           }}
           downloadType={downloadTicketData?.downloadType || 'free'}
           ticketNumber={downloadTicketData?.ticketNumber || ''}
+          fileName={downloadTicketData?.fileName || ''}
+          rowCount={downloadTicketData?.rowCount || 0}
+          columnCount={downloadTicketData?.columnCount || 0}
           playClick={playClick}
           playDisk={playDisk}
         />

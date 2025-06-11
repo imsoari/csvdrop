@@ -31,22 +31,312 @@
 /* Mac Theme Base */
 .mac-theme {
   font-family: 'Chicago', monospace;
-  background-color: #dfdfdf; /* Warm Light Gray */
-  color: #1b1b1b; /* Deep Black */
+  background-color: #f3f3f3; /* Light Gray */
+  color: #000000; /* Black */
   image-rendering: pixelated;
-  background-image: url('/patterns/grid.svg');
-  background-size: 20px 20px;
-  background-repeat: repeat;
 }
 
 /* Mac Window */
 .mac-window {
-  background-color: #f3f3f3; /* Soft White */
+  background-color: #f3f3f3; /* Light Gray */
   border: 2px solid #1b1b1b; /* Deep Black */
   border-radius: 0;
-  box-shadow: 4px 4px 0 rgba(27, 27, 27, 0.5); /* Deep Black with opacity */
+  box-shadow: none; /* No shadows in classic UI */
   padding: 0;
   position: relative;
+}
+
+/* Retro UI Specific Styles */
+.retro-gradient-text {
+  background: linear-gradient(to right, #66FF99, #00FF9F);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
+}
+
+/* Mac Desktop Styles */
+.mac-desktop {
+  background-color: #77AADD;
+  background-image: linear-gradient(to bottom, #99CCFF, #5588BB);
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  padding: 40px 20px 80px;
+}
+
+.mac-menubar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 24px;
+  background-color: #f3f3f3;
+  border-bottom: 1px solid #999;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  z-index: 100;
+  font-family: 'Chicago', monospace;
+  font-size: 12px;
+}
+
+.mac-apple-logo {
+  margin-right: 16px;
+  font-size: 16px;
+}
+
+.mac-menu-item {
+  margin-right: 16px;
+  cursor: pointer;
+}
+
+.mac-dock {
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(243, 243, 243, 0.7);
+  border: 2px solid #1b1b1b;
+  border-radius: 12px;
+  padding: 10px 20px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-end;
+  z-index: 100;
+}
+
+.mac-desktop-icon {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+  margin: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.mac-desktop-icon:hover {
+  transform: scale(1.05);
+}
+
+.mac-desktop-icon:active {
+  transform: scale(0.95);
+}
+
+.mac-desktop-icon-img {
+  width: 48px;
+  height: 48px;
+  background-color: #f3f3f3;
+  border: 2px solid #1b1b1b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 5px;
+  font-size: 24px;
+}
+
+.mac-desktop-icon-label {
+  color: #fff;
+  font-size: 12px;
+  text-shadow: 1px 1px 1px #000;
+  word-break: break-word;
+  display: block;
+  font-family: 'Chicago', monospace;
+}
+
+.mac-dock-icon {
+  width: 48px;
+  height: 48px;
+  background-color: #f3f3f3;
+  border: 2px solid #1b1b1b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.mac-dock-icon:hover {
+  transform: scale(1.2) translateY(-10px);
+}
+
+.mac-dock-icon:hover::after {
+  content: attr(data-name);
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+/* Desktop window styles */
+.mac-desktop-window {
+  position: absolute;
+  background-color: #f3f3f3;
+  border: 2px solid #1b1b1b;
+  min-width: 300px;
+  min-height: 200px;
+  z-index: 10;
+  resize: both;
+  overflow: auto;
+  box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.2);
+}
+
+.mac-window-controls {
+  display: flex;
+  gap: 5px;
+  padding: 2px 5px;
+}
+
+.mac-window-control {
+  width: 12px;
+  height: 12px;
+  border: 1px solid #1b1b1b;
+  border-radius: 50%;
+}
+
+.mac-window-close {
+  background-color: #ff5f57;
+}
+
+.mac-window-minimize {
+  background-color: #ffbd2e;
+}
+
+.mac-window-expand {
+  background-color: #28c940;
+}
+
+.retro-gradient-btn {
+  background: linear-gradient(to right, #66FF99, #00FF9F);
+  color: #000000;
+  border: 2px solid #1b1b1b;
+  font-family: 'Chicago', monospace;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.retro-gradient-btn:hover {
+  transform: scale(1.05);
+}
+
+.retro-gradient-btn:active {
+  transform: scale(0.98);
+}
+
+.retro-checkbox {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #1b1b1b;
+  display: inline-block;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.retro-checkbox.checked {
+  background: linear-gradient(to right, #66FF99, #00FF9F);
+}
+
+.retro-pixel-border {
+  border: 2px dotted #1b1b1b;
+  animation: pixelBorder 2s infinite;
+}
+
+@keyframes pixelBorder {
+  0% { border-style: solid; }
+  50% { border-style: dotted; }
+  100% { border-style: solid; }
+}
+
+.retro-panel {
+  background-color: #f3f3f3;
+  border: 2px solid #1b1b1b;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.retro-panel-title {
+  background-color: #1b1b1b;
+  color: #f3f3f3;
+  padding: 4px 8px;
+  margin: -16px -16px 16px -16px;
+  font-family: 'Chicago', monospace;
+  font-size: 16px;
+}
+
+.retro-feature-icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+  display: block;
+  text-align: center;
+}
+
+.retro-hero-title {
+  font-family: 'Chicago', monospace;
+  font-size: 48px;
+  font-weight: bold;
+  letter-spacing: -2px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.retro-terminal-text {
+  font-family: 'Monaco', monospace;
+  background-color: #1b1b1b;
+  color: #66FF99;
+  padding: 16px;
+  margin-bottom: 24px;
+  text-align: center;
+  font-size: 16px;
+}
+
+.retro-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 2px solid #1b1b1b;
+}
+
+.retro-table th {
+  background-color: #1b1b1b;
+  color: #f3f3f3;
+  text-align: left;
+  padding: 8px;
+}
+
+.retro-table td {
+  border: 1px solid #1b1b1b;
+  padding: 8px;
+}
+
+.retro-price-card {
+  border: 2px solid #1b1b1b;
+  padding: 16px;
+  text-align: center;
+  width: 100%;
+}
+
+.retro-price-title {
+  font-family: 'Chicago', monospace;
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.retro-price-amount {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+.retro-checkmark {
+  color: #66FF99;
+  font-weight: bold;
 }
 
 .mac-window-title {

@@ -94,6 +94,7 @@ const MacPaymentModal: React.FC<MacPaymentModalProps> = ({
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div 
                     className={`mac-window cursor-pointer ${selectedPlan === 'single' ? 'border-4' : ''}`}
+                    style={{ background: 'linear-gradient(to bottom right, #66FF99, #00FF9F)' }}
                     onClick={() => {
                       setSelectedPlan('single');
                       playClick?.();
@@ -116,6 +117,7 @@ const MacPaymentModal: React.FC<MacPaymentModalProps> = ({
                   
                   <div 
                     className={`mac-window cursor-pointer ${selectedPlan === 'pro' ? 'border-4' : ''}`}
+                    style={{ background: 'linear-gradient(to bottom right, #66FF99, #00FF9F)' }}
                     onClick={() => {
                       setSelectedPlan('pro');
                       playClick?.();
