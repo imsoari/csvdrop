@@ -26,50 +26,49 @@ const LandingPage: React.FC<LandingPageProps> = ({ onShowAuth, onShowPayment }) 
         
         <main>
           {/* Hero Section */}
-          <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-20">
             <div className="text-center">
-              <div className="inline-flex items-center gap-3 px-8 py-4 bg-white/10 backdrop-blur-2xl rounded-full border border-white/20 shadow-2xl mb-12"
+              <div className="inline-flex items-center gap-2 sm:gap-3 px-4 sm:px-8 py-3 sm:py-4 bg-white/10 backdrop-blur-2xl rounded-full border border-white/20 shadow-2xl mb-8 sm:mb-12"
                    style={{
                      background: 'linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%)',
                      boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.3), 0 20px 40px rgba(0,0,0,0.3)'
                    }}>
-                <div className="w-3 h-3 bg-gradient-to-r from-emerald-400 to-cyan-400 rounded-full animate-pulse"></div>
-                <span className="text-white/90 font-medium text-sm tracking-wide">PROFESSIONAL CSV PROCESSING PLATFORM</span>
+                <div className="w-2 h-2 sm:w-3 sm:h-3 bg-gradient-to-r from-csv-orange-400 to-csv-orange-600 rounded-full animate-pulse"></div>
+                <span className="text-white/90 font-medium text-xs sm:text-sm tracking-wide">PROFESSIONAL CSV PROCESSING PLATFORM</span>
               </div>
               
-              <h1 className="text-7xl md:text-9xl font-black text-white mb-8 leading-none tracking-tighter">
+              <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-9xl font-monument font-black text-white mb-4 sm:mb-8 leading-none tracking-tighter">
                 TRANSFORM{' '}
-                <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-csv-orange-400 via-csv-orange-500 to-csv-orange-700 bg-clip-text text-transparent">
                   DATA
                 </span>
                 <br />
-                <span className="text-6xl md:text-8xl text-white/70 font-light">INSTANTLY</span>
+                <span className="text-3xl sm:text-4xl md:text-6xl lg:text-8xl text-white/70 font-light">INSTANTLY</span>
               </h1>
               
-              <p className="text-2xl text-white/80 mb-16 max-w-4xl mx-auto leading-relaxed font-light">
+              <p className="text-base sm:text-xl md:text-2xl text-white/80 mb-8 sm:mb-16 max-w-4xl mx-auto leading-relaxed font-light">
                 Revolutionary CSV consolidation with AI-powered column mapping, 
                 enterprise-grade deduplication, and lightning-fast processing.
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-6 justify-center mb-20">
+              <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center mb-12 sm:mb-20">
                 <button
                   onClick={onShowAuth}
-                  className="group px-12 py-6 bg-gradient-to-r from-cyan-500 to-blue-600 text-white rounded-2xl font-bold text-xl border border-cyan-400/50 transition-all duration-500 shadow-2xl hover:shadow-cyan-500/25 transform hover:scale-105 flex items-center justify-center gap-4"
+                  className="group px-6 sm:px-8 md:px-12 py-4 sm:py-5 md:py-6 bg-csv-gradient text-white rounded-xl sm:rounded-2xl font-bold text-sm sm:text-lg md:text-xl border border-csv-orange-400/50 transition-all duration-500 shadow-xl sm:shadow-2xl hover:shadow-csv-orange-500/25 transform hover:scale-105 flex items-center justify-center gap-2 sm:gap-4"
                   style={{
-                    background: 'linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%)',
-                    boxShadow: '0 20px 40px rgba(6,182,212,0.3), inset 0 1px 0 rgba(255,255,255,0.2)'
+                    boxShadow: '0 10px 20px rgba(249,115,22,0.3), inset 0 1px 0 rgba(255,255,255,0.2)'
                   }}
                 >
-                  <Upload className="w-6 h-6 transition-transform group-hover:scale-110" />
+                  <Upload className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 transition-transform group-hover:scale-110" />
                   START PROCESSING
-                  <ArrowRight className="w-6 h-6 transition-transform group-hover:translate-x-1" />
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 transition-transform group-hover:translate-x-1" />
                 </button>
                 <button
                   onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="px-12 py-6 bg-white/10 backdrop-blur-2xl text-white rounded-2xl font-bold text-xl border border-white/20 transition-all duration-500 shadow-2xl hover:shadow-white/10 transform hover:scale-105"
+                  className="px-6 sm:px-8 md:px-12 py-4 sm:py-5 md:py-6 bg-white/10 backdrop-blur-2xl text-white rounded-xl sm:rounded-2xl font-bold text-sm sm:text-lg md:text-xl border border-white/20 transition-all duration-500 shadow-xl sm:shadow-2xl hover:shadow-white/10 transform hover:scale-105"
                   style={{
                     background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
-                    boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.2), 0 20px 40px rgba(0,0,0,0.2)'
+                    boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.2), 0 10px 20px rgba(0,0,0,0.2)'
                   }}
                 >
                   EXPLORE FEATURES
@@ -77,23 +76,23 @@ const LandingPage: React.FC<LandingPageProps> = ({ onShowAuth, onShowPayment }) 
               </div>
 
               {/* Metrics */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-20">
+              <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8 mb-12 sm:mb-20">
                 {[
                   { value: '50MB', label: 'Max File Size', icon: Upload, color: 'from-emerald-400 to-cyan-500' },
                   { value: '3', label: 'Files at Once', icon: Layers, color: 'from-blue-400 to-indigo-500' },
                   { value: '100%', label: 'Client-Side', icon: Shield, color: 'from-purple-400 to-pink-500' },
                   { value: '1M+', label: 'Rows Processed', icon: BarChart3, color: 'from-orange-400 to-red-500' }
                 ].map((metric, index) => (
-                  <div key={index} className="text-center p-8 bg-white/5 backdrop-blur-2xl rounded-3xl border border-white/10 shadow-2xl hover:bg-white/10 transition-all duration-500 transform hover:scale-105"
+                  <div key={index} className="text-center p-4 sm:p-6 md:p-8 bg-white/5 backdrop-blur-2xl rounded-2xl sm:rounded-3xl border border-white/10 shadow-xl sm:shadow-2xl hover:bg-white/10 transition-all duration-500 transform hover:scale-105"
                        style={{
                          background: 'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%)',
-                         boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), 0 20px 40px rgba(0,0,0,0.2)'
+                         boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), 0 10px 20px sm:0 20px 40px rgba(0,0,0,0.2)'
                        }}>
-                    <div className={`w-16 h-16 bg-gradient-to-r ${metric.color} rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg`}>
-                      <metric.icon className="w-8 h-8 text-white" />
+                    <div className={`w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 bg-gradient-to-r ${metric.color} rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4 shadow-lg`}>
+                      <metric.icon className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 text-white" />
                     </div>
-                    <div className="text-4xl font-black text-white mb-2">{metric.value}</div>
-                    <div className="text-sm text-white/70 font-medium uppercase tracking-wider">{metric.label}</div>
+                    <div className="text-2xl sm:text-3xl md:text-4xl font-black text-white mb-1 sm:mb-2">{metric.value}</div>
+                    <div className="text-xs sm:text-sm text-white/70 font-medium uppercase tracking-wider">{metric.label}</div>
                   </div>
                 ))}
               </div>

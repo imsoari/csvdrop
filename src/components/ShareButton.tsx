@@ -95,7 +95,7 @@ const ShareButton: React.FC<ShareButtonProps> = ({
     <div className="relative" ref={menuRef}>
       <button
         onClick={handleShareClick}
-        className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 text-sm font-medium"
+        className="flex items-center gap-2 px-3 py-2 bg-csv-gradient text-white rounded-xl hover:bg-csv-orange-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 text-sm font-medium"
         title="Share CSVDROP"
       >
         <Share2 className="w-4 h-4" />
@@ -134,25 +134,25 @@ const ShareButton: React.FC<ShareButtonProps> = ({
             
             <button
               onClick={shareToTwitter}
-              className="w-full flex items-center gap-3 px-3 py-2 hover:bg-blue-50/80 rounded-xl transition-all duration-300 text-left"
+              className="w-full flex items-center gap-3 px-3 py-2 hover:bg-csv-orange-50/80 rounded-xl transition-all duration-300 text-left"
             >
-              <Twitter className="w-4 h-4 text-blue-500" />
+              <Twitter className="w-4 h-4 text-csv-orange-500" />
               <span className="text-sm font-medium text-gray-900">Twitter</span>
             </button>
             
             <button
               onClick={shareToFacebook}
-              className="w-full flex items-center gap-3 px-3 py-2 hover:bg-blue-50/80 rounded-xl transition-all duration-300 text-left"
+              className="w-full flex items-center gap-3 px-3 py-2 hover:bg-csv-orange-50/80 rounded-xl transition-all duration-300 text-left"
             >
-              <Facebook className="w-4 h-4 text-blue-600" />
+              <Facebook className="w-4 h-4 text-csv-orange-600" />
               <span className="text-sm font-medium text-gray-900">Facebook</span>
             </button>
             
             <button
               onClick={shareToLinkedIn}
-              className="w-full flex items-center gap-3 px-3 py-2 hover:bg-blue-50/80 rounded-xl transition-all duration-300 text-left"
+              className="w-full flex items-center gap-3 px-3 py-2 hover:bg-csv-orange-50/80 rounded-xl transition-all duration-300 text-left"
             >
-              <Linkedin className="w-4 h-4 text-blue-700" />
+              <Linkedin className="w-4 h-4 text-csv-orange-700" />
               <span className="text-sm font-medium text-gray-900">LinkedIn</span>
             </button>
           </div>

@@ -109,22 +109,22 @@ const DataPointSelector: React.FC<DataPointSelectorProps> = ({
 
   if (!isVisible) {
     return (
-      <div className="mb-8">
+      <div className="mb-4 sm:mb-6 md:mb-8">
         <button
           onClick={onToggleVisibility}
-          className="w-full p-6 bg-gradient-to-r from-purple-50/80 to-pink-50/80 rounded-3xl border border-purple-200/50 hover:from-purple-100/80 hover:to-pink-100/80 transition-all duration-300 transform hover:scale-[1.02] shadow-lg"
+          className="w-full p-4 sm:p-6 bg-gradient-to-r from-purple-50/80 to-pink-50/80 rounded-3xl border border-purple-200/50 hover:from-purple-100/80 hover:to-pink-100/80 transition-all duration-300 transform hover:scale-[1.02] shadow-lg"
           style={{
             background: 'linear-gradient(135deg, rgba(139,92,246,0.1) 0%, rgba(168,85,247,0.1) 100%)',
             boxShadow: '0 15px 35px -5px rgba(139,92,246,0.2), inset 0 1px 0 rgba(255,255,255,0.6)'
           }}
         >
-          <div className="flex items-center justify-center gap-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
             <div className="p-3 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl shadow-lg">
               <Sparkles className="w-6 h-6 text-white" />
             </div>
             <div className="text-center">
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Smart Data Point Consolidation</h3>
-              <p className="text-gray-600">Select specific data fields to consolidate (name, email, phone, etc.)</p>
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-1 sm:mb-2 text-center sm:text-left">Smart Data Point Consolidation</h3>
+              <p className="text-gray-600 text-sm sm:text-base text-center sm:text-left">Select specific data fields to consolidate (name, email, phone, etc.)</p>
             </div>
             <ArrowRight className="w-6 h-6 text-purple-600" />
           </div>
@@ -142,14 +142,14 @@ const DataPointSelector: React.FC<DataPointSelectorProps> = ({
            }}>
         
         {/* Header */}
-        <div className="px-8 py-6 bg-gradient-to-r from-purple-50/80 to-pink-50/80 border-b border-white/30">
-          <div className="flex items-center justify-between">
+        <div className="px-4 sm:px-6 md:px-8 py-4 sm:py-5 md:py-6 bg-gradient-to-r from-purple-50/80 to-pink-50/80 border-b border-white/30">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-0">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl">
                 <Sparkles className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">Smart Data Point Consolidation</h2>
+                <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900">Smart Data Point Consolidation</h2>
                 <p className="text-gray-600 text-sm">Select specific data fields to consolidate across your CSV files</p>
               </div>
             </div>
@@ -171,9 +171,9 @@ const DataPointSelector: React.FC<DataPointSelectorProps> = ({
           </div>
         </div>
 
-        <div className="p-8 space-y-8">
+        <div className="p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6 md:space-y-8">
           {/* Search and Controls */}
-          <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
@@ -184,23 +184,23 @@ const DataPointSelector: React.FC<DataPointSelectorProps> = ({
                 className="w-full pl-10 pr-4 py-3 bg-white/80 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300"
               />
             </div>
-            <div className="flex gap-3">
+            <div className="flex flex-wrap gap-2 sm:gap-3">
               <button
                 onClick={selectAllDataPoints}
-                className="px-4 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl font-semibold hover:from-emerald-600 hover:to-teal-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                className="flex-1 sm:flex-none px-3 sm:px-4 py-2 sm:py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl text-sm sm:text-base font-semibold hover:from-emerald-600 hover:to-teal-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
               >
                 Select All
               </button>
               <button
                 onClick={clearAllDataPoints}
-                className="px-4 py-3 bg-gradient-to-r from-gray-500 to-gray-600 text-white rounded-xl font-semibold hover:from-gray-600 hover:to-gray-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                className="flex-1 sm:flex-none px-3 sm:px-4 py-2 sm:py-3 bg-gradient-to-r from-gray-500 to-gray-600 text-white rounded-xl text-sm sm:text-base font-semibold hover:from-gray-600 hover:to-gray-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
               >
                 Clear All
               </button>
               <button
                 onClick={autoSuggestMappings}
                 disabled={autoMappingInProgress}
-                className="px-4 py-3 bg-gradient-to-r from-purple-500 to-pink-600 text-white rounded-xl font-semibold hover:from-purple-600 hover:to-pink-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 disabled:opacity-50 flex items-center gap-2"
+                className="flex-1 sm:flex-none px-3 sm:px-4 py-2 sm:py-3 bg-gradient-to-r from-purple-500 to-pink-600 text-white rounded-xl text-sm sm:text-base font-semibold hover:from-purple-600 hover:to-pink-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {autoMappingInProgress ? (
                   <>
@@ -219,12 +219,12 @@ const DataPointSelector: React.FC<DataPointSelectorProps> = ({
 
           {/* Selected Data Points Summary */}
           {selectedDataPoints.length > 0 && (
-            <div className="p-6 bg-gradient-to-r from-purple-100/80 to-pink-100/80 rounded-2xl border border-purple-200/50"
+            <div className="p-3 sm:p-4 md:p-6 bg-gradient-to-r from-purple-100/80 to-pink-100/80 rounded-2xl border border-purple-200/50"
                  style={{
                    background: 'linear-gradient(135deg, rgba(139,92,246,0.1) 0%, rgba(168,85,247,0.1) 100%)',
                    boxShadow: '0 8px 20px -5px rgba(139,92,246,0.2), inset 0 1px 0 rgba(255,255,255,0.6)'
                  }}>
-              <h3 className="text-lg font-bold text-purple-900 mb-3">Selected Data Points ({selectedDataPoints.length})</h3>
+              <h3 className="text-base sm:text-lg font-bold text-purple-900 mb-2 sm:mb-3">Selected Data Points ({selectedDataPoints.length})</h3>
               <div className="flex flex-wrap gap-2">
                 {selectedDataPoints.map(dataPoint => (
                   <span
@@ -254,7 +254,7 @@ const DataPointSelector: React.FC<DataPointSelectorProps> = ({
               return (
                 <div
                   key={dataPoint}
-                  className={`p-6 rounded-2xl border-2 transition-all duration-300 transform hover:scale-105 cursor-pointer ${
+                  className={`p-3 sm:p-4 md:p-6 rounded-2xl border-2 transition-all duration-300 transform hover:scale-105 cursor-pointer ${
                     isSelected
                       ? 'border-purple-400 bg-gradient-to-br from-purple-50/80 to-pink-50/80 shadow-lg'
                       : 'border-gray-200 bg-white/60 hover:border-purple-300 hover:bg-purple-50/40'
@@ -270,11 +270,11 @@ const DataPointSelector: React.FC<DataPointSelectorProps> = ({
                   onClick={() => handleDataPointToggle(dataPoint)}
                 >
                   <div className="flex items-start justify-between mb-3">
-                    <div className="flex items-center gap-3">
-                      <span className="text-2xl">{config.icon}</span>
+                    <div className="flex items-center gap-2 sm:gap-3">
+                      <span className="text-xl sm:text-2xl">{config.icon}</span>
                       <div>
-                        <h3 className="font-bold text-gray-900">{config.label}</h3>
-                        <p className="text-sm text-gray-600">{config.description}</p>
+                        <h3 className="text-sm sm:text-base font-bold text-gray-900">{config.label}</h3>
+                        <p className="text-xs sm:text-sm text-gray-600">{config.description}</p>
                       </div>
                     </div>
                     {isSelected && (
@@ -314,7 +314,7 @@ const DataPointSelector: React.FC<DataPointSelectorProps> = ({
               </h3>
               
               {files.map(file => (
-                <div key={file.id} className="p-6 bg-gray-50/80 rounded-2xl border border-gray-200/50">
+                <div key={file.id} className="p-3 sm:p-4 md:p-6 bg-gray-50/80 rounded-2xl border border-gray-200/50">
                   <h4 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
                     <span className="p-2 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl text-white">
                       📄
@@ -322,7 +322,7 @@ const DataPointSelector: React.FC<DataPointSelectorProps> = ({
                     {file.name}
                   </h4>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                     {selectedDataPoints.map(dataPoint => (
                       <div key={dataPoint} className="space-y-2">
                         <label className="block text-sm font-medium text-gray-700">
@@ -347,8 +347,8 @@ const DataPointSelector: React.FC<DataPointSelectorProps> = ({
           )}
 
           {/* Help Text */}
-          <div className="p-4 bg-blue-50/80 rounded-2xl border border-blue-200/50">
-            <p className="text-sm text-blue-800">
+          <div className="p-3 sm:p-4 bg-blue-50/80 rounded-2xl border border-blue-200/50">
+            <p className="text-xs sm:text-sm text-blue-800">
               <strong>💡 Tip:</strong> Data point consolidation intelligently maps similar columns across your CSV files. 
               For example, "First Name", "fname", and "given_name\" will all be consolidated into a single "First Name\" column.
             </p>

@@ -1,3 +1,38 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Monument Font Import */
+@font-face {
+  font-family: 'Monument';
+  src: url('/fonts/MonumentExtended-Regular.woff2') format('woff2'),
+       url('/fonts/MonumentExtended-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Monument';
+  src: url('/fonts/MonumentExtended-Bold.woff2') format('woff2'),
+       url('/fonts/MonumentExtended-Bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Monument';
+  src: url('/fonts/MonumentExtended-Black.woff2') format('woff2'),
+       url('/fonts/MonumentExtended-Black.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Custom Utilities */
+@layer utilities {
+  .font-monument {
+    font-family: 'Monument', sans-serif;
+  }
+}

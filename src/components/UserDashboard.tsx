@@ -232,16 +232,16 @@ const UserDashboard: React.FC<UserDashboardProps> = ({ onShowPayment, onShowDown
           onAuthClick={() => {}} // User is already authenticated
         />
         
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16">
           {/* Welcome Section */}
-          <div className="text-center mb-20">
-            <h1 className="text-6xl md:text-8xl font-black text-white mb-8 leading-none tracking-tighter">
+          <div className="text-center mb-10 sm:mb-16 md:mb-20">
+            <h1 className="text-4xl sm:text-6xl md:text-8xl font-monument font-black text-white mb-4 sm:mb-6 md:mb-8 leading-none tracking-tighter">
               WELCOME BACK,{' '}
-              <span className="bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-csv-orange-400 to-csv-orange-600 bg-clip-text text-transparent">
                 {profile?.first_name?.toUpperCase() || 'USER'}
               </span>
             </h1>
-            <p className="text-2xl text-white/80 mb-12 max-w-4xl mx-auto leading-relaxed font-light">
+            <p className="text-lg sm:text-xl md:text-2xl text-white/80 mb-6 sm:mb-8 md:mb-12 max-w-4xl mx-auto leading-relaxed font-light">
               Transform your CSV files into unified datasets with enterprise-grade processing power.
             </p>
           </div>
@@ -256,24 +256,24 @@ const UserDashboard: React.FC<UserDashboardProps> = ({ onShowPayment, onShowDown
           )}
 
           {/* File Upload Section */}
-          <div className="mb-16">
+          <div className="mb-8 sm:mb-12 md:mb-16">
             <div className="bg-black/20 backdrop-blur-2xl rounded-3xl border border-white/10 overflow-hidden shadow-2xl"
                  style={{
                    background: 'linear-gradient(135deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 100%)',
                    boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), 0 25px 50px rgba(0,0,0,0.3)'
                  }}>
-              <div className="px-10 py-8 bg-white/5 backdrop-blur-2xl border-b border-white/10">
-                <h2 className="text-3xl font-black text-white flex items-center gap-6">
-                  <div className="w-16 h-16 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-2xl">
+              <div className="px-4 sm:px-6 md:px-10 py-4 sm:py-6 md:py-8 bg-white/5 backdrop-blur-2xl border-b border-white/10">
+                <h2 className="text-3xl font-monument font-black text-white flex items-center gap-6">
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-csv-gradient rounded-2xl flex items-center justify-center shadow-2xl">
                     <Upload className="w-8 h-8 text-white" />
                   </div>
                   UPLOAD CSV FILES
                 </h2>
-                <p className="text-white/70 mt-3 font-light text-lg">Select up to 3 CSV files to consolidate (max 50MB each)</p>
+                <p className="text-white/70 mt-2 sm:mt-3 font-light text-base sm:text-lg">Select up to 3 CSV files to consolidate (max 50MB each)</p>
               </div>
               
               <div className="p-10">
-                <div className="border-2 border-dashed border-white/30 rounded-3xl p-20 text-center hover:border-white/50 transition-all duration-500 bg-white/5 backdrop-blur-sm">
+                <div className="border-2 border-dashed border-white/30 rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-10 lg:p-20 text-center hover:border-white/50 transition-all duration-500 bg-white/5 backdrop-blur-sm">
                   <input
                     type="file"
                     multiple
@@ -284,16 +284,16 @@ const UserDashboard: React.FC<UserDashboardProps> = ({ onShowPayment, onShowDown
                   />
                   <label
                     htmlFor="file-upload"
-                    className="cursor-pointer flex flex-col items-center gap-8"
+                    className="cursor-pointer flex flex-col items-center gap-4 sm:gap-6 md:gap-8"
                   >
-                    <div className="w-24 h-24 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-3xl flex items-center justify-center shadow-2xl">
-                      <Upload className="w-12 h-12 text-white" />
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-csv-gradient rounded-3xl flex items-center justify-center shadow-2xl">
+                      <Upload className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-white" />
                     </div>
                     <div>
-                      <p className="text-3xl font-black text-white mb-4 tracking-wider">
+                      <p className="text-xl sm:text-2xl md:text-3xl font-monument font-black text-white mb-2 sm:mb-3 md:mb-4 tracking-wider">
                         CHOOSE CSV FILES
                       </p>
-                      <p className="text-white/70 font-light text-lg">
+                      <p className="text-white/70 font-light text-sm sm:text-base md:text-lg">
                         Click to browse or drag and drop your files here
                       </p>
                     </div>
@@ -301,49 +301,49 @@ const UserDashboard: React.FC<UserDashboardProps> = ({ onShowPayment, onShowDown
                 </div>
 
                 {processingError && (
-                  <div className="mt-8 p-8 bg-red-500/20 backdrop-blur-2xl rounded-3xl border border-red-500/30"
+                  <div className="mt-4 sm:mt-6 md:mt-8 p-3 sm:p-4 md:p-6 lg:p-8 bg-red-500/20 backdrop-blur-2xl rounded-2xl sm:rounded-3xl border border-red-500/30"
                        style={{
                          background: 'linear-gradient(135deg, rgba(239,68,68,0.2) 0%, rgba(220,38,38,0.1) 100%)',
                          boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), 0 10px 30px rgba(239,68,68,0.2)'
                        }}>
                     <div className="flex items-start gap-6">
-                      <AlertCircle className="w-8 h-8 text-red-400 mt-1 flex-shrink-0" />
+                      <AlertCircle className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 text-red-400 mt-1 flex-shrink-0" />
                       <div>
-                        <h4 className="font-black text-red-400 mb-3 text-lg">UPLOAD ERROR</h4>
-                        <p className="text-sm text-red-300 whitespace-pre-line font-light">{processingError}</p>
+                        <h4 className="font-black text-red-400 mb-2 sm:mb-3 text-sm sm:text-base md:text-lg">UPLOAD ERROR</h4>
+                        <p className="text-xs sm:text-sm text-red-300 whitespace-pre-line font-light">{processingError}</p>
                       </div>
                     </div>
                   </div>
                 )}
 
                 {files.length > 0 && (
-                  <div className="mt-12 space-y-8">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-2xl font-black text-white">UPLOADED FILES ({files.length})</h3>
+                  <div className="mt-4 sm:mt-6 md:mt-8 lg:mt-12 space-y-3 sm:space-y-4 md:space-y-6 lg:space-y-8">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
+                      <h3 className="text-lg sm:text-xl md:text-2xl font-monument font-black text-white">UPLOADED FILES ({files.length})</h3>
                       <button
                         onClick={resetFiles}
-                        className="px-6 py-3 bg-white/10 backdrop-blur-2xl hover:bg-white/20 text-white rounded-2xl transition-all duration-300 font-bold border border-white/20"
+                        className="px-3 sm:px-4 md:px-6 py-1.5 sm:py-2 md:py-3 bg-white/10 backdrop-blur-2xl hover:bg-white/20 text-white rounded-xl sm:rounded-2xl transition-all duration-300 font-bold border border-white/20 text-xs sm:text-sm md:text-base"
                       >
                         CLEAR ALL
                       </button>
                     </div>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
                       {files.map((file) => (
-                        <div key={file.id} className="p-8 bg-white/10 backdrop-blur-2xl rounded-3xl border border-white/20 shadow-2xl"
+                        <div key={file.id} className="p-3 sm:p-4 md:p-6 lg:p-8 bg-white/10 backdrop-blur-2xl rounded-2xl sm:rounded-3xl border border-white/20 shadow-2xl"
                              style={{
                                background: 'linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%)',
                                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.2), 0 10px 30px rgba(0,0,0,0.3)'
                              }}>
-                          <div className="flex items-start gap-6">
-                            <div className="w-16 h-16 bg-gradient-to-r from-emerald-400 to-cyan-500 rounded-2xl flex items-center justify-center shadow-2xl">
-                              <CheckCircle className="w-8 h-8 text-white" />
+                          <div className="flex items-start gap-2 sm:gap-3 md:gap-4 lg:gap-6">
+                            <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-16 lg:h-16 bg-csv-gradient rounded-xl sm:rounded-2xl flex items-center justify-center shadow-2xl">
+                              <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 lg:w-8 lg:h-8 text-white" />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <h4 className="font-black text-white truncate mb-3 text-lg" title={file.name}>
+                              <h4 className="font-black text-white truncate mb-2 sm:mb-3 text-sm sm:text-base md:text-lg" title={file.name}>
                                 {file.name}
                               </h4>
-                              <div className="text-sm text-white/70 space-y-2 font-light">
+                              <div className="text-xs sm:text-sm text-white/70 space-y-1 sm:space-y-2 font-light">
                                 <p>{file.rowCount.toLocaleString()} rows × {file.headers.length} columns</p>
                                 <p>{(file.size / 1024).toFixed(1)} KB</p>
                               </div>
@@ -415,34 +415,34 @@ const UserDashboard: React.FC<UserDashboardProps> = ({ onShowPayment, onShowDown
                      background: 'linear-gradient(135deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 100%)',
                      boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.1), 0 25px 50px rgba(0,0,0,0.3)'
                    }}>
-                <div className="px-10 py-8 bg-emerald-500/20 backdrop-blur-2xl border-b border-white/10">
-                  <h2 className="text-3xl font-black text-white flex items-center gap-6">
-                    <div className="w-16 h-16 bg-gradient-to-r from-emerald-400 to-cyan-500 rounded-2xl flex items-center justify-center shadow-2xl">
+                <div className="px-4 sm:px-6 md:px-10 py-4 sm:py-6 md:py-8 bg-csv-orange-500/20 backdrop-blur-2xl border-b border-white/10">
+                  <h2 className="text-3xl font-monument font-black text-white flex items-center gap-6">
+                    <div className="w-16 h-16 bg-csv-gradient rounded-2xl flex items-center justify-center shadow-2xl">
                       <Download className="w-8 h-8 text-white" />
                     </div>
                     DOWNLOAD CONSOLIDATED DATA
                   </h2>
-                  <p className="text-white/70 mt-3 font-light text-lg">Your consolidated CSV file is ready for download</p>
+                  <p className="text-white/70 mt-2 sm:mt-3 font-light text-base sm:text-lg">Your consolidated CSV file is ready for download</p>
                 </div>
                 
                 <div className="p-10">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8 mb-6 sm:mb-8 md:mb-12">
                     <div className="text-center p-8 bg-white/10 backdrop-blur-2xl rounded-3xl border border-white/20 shadow-2xl">
-                      <BarChart3 className="w-12 h-12 text-white mx-auto mb-4" />
+                      <BarChart3 className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-white mx-auto mb-2 sm:mb-3 md:mb-4" />
                       <div className="text-4xl font-black text-white mb-3">
                         {consolidatedData.data.length.toLocaleString()}
                       </div>
                       <div className="text-sm text-white/70 font-medium uppercase tracking-wider">TOTAL ROWS</div>
                     </div>
                     <div className="text-center p-8 bg-white/10 backdrop-blur-2xl rounded-3xl border border-white/20 shadow-2xl">
-                      <Layers className="w-12 h-12 text-white mx-auto mb-4" />
+                      <Layers className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-white mx-auto mb-2 sm:mb-3 md:mb-4" />
                       <div className="text-4xl font-black text-white mb-3">
                         {consolidatedData.headers.length}
                       </div>
                       <div className="text-sm text-white/70 font-medium uppercase tracking-wider">COLUMNS</div>
                     </div>
                     <div className="text-center p-8 bg-white/10 backdrop-blur-2xl rounded-3xl border border-white/20 shadow-2xl">
-                      <Upload className="w-12 h-12 text-white mx-auto mb-4" />
+                      <Upload className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-white mx-auto mb-2 sm:mb-3 md:mb-4" />
                       <div className="text-4xl font-black text-white mb-3">
                         {files.length}
                       </div>
@@ -452,13 +452,12 @@ const UserDashboard: React.FC<UserDashboardProps> = ({ onShowPayment, onShowDown
 
                   <button
                     onClick={handleDownload}
-                    className="w-full py-8 bg-gradient-to-r from-emerald-500 to-cyan-500 text-white rounded-3xl font-black text-2xl hover:from-emerald-400 hover:to-cyan-400 transition-all duration-500 shadow-2xl hover:shadow-emerald-500/25 transform hover:scale-105 flex items-center justify-center gap-4"
+                    className="w-full py-4 sm:py-6 md:py-8 bg-csv-gradient text-white rounded-3xl font-black text-lg sm:text-xl md:text-2xl hover:from-csv-orange-400 hover:to-csv-orange-600 transition-all duration-500 shadow-2xl hover:shadow-csv-orange-500/25 transform hover:scale-105 flex items-center justify-center gap-2 sm:gap-3 md:gap-4"
                     style={{
-                      background: 'linear-gradient(135deg, #10b981 0%, #06b6d4 100%)',
-                      boxShadow: '0 25px 50px rgba(16,185,129,0.3), inset 0 1px 0 rgba(255,255,255,0.2)'
+                      boxShadow: '0 25px 50px rgba(249,115,22,0.3), inset 0 1px 0 rgba(255,255,255,0.2)'
                     }}
                   >
-                    <Download className="w-8 h-8" />
+                    <Download className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8" />
                     DOWNLOAD CONSOLIDATED CSV
                   </button>
                 </div>

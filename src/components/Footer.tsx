@@ -12,26 +12,26 @@ const Footer: React.FC = () => {
         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="text-center md:text-left">
             <p className="text-white/60 text-sm font-light">
-              © 2025 CSVDROP
+              © 2025 <span className="font-monument font-black">CSVDROP</span>
             </p>
           </div>
           
           <div className="flex items-center gap-12 text-sm">
             <Link 
               to="/privacy" 
-              className="text-white/70 hover:text-white transition-colors duration-300 font-medium uppercase tracking-wider"
+              className="text-white/70 hover:text-csv-orange-400 transition-colors duration-300 font-medium uppercase tracking-wider"
             >
               Privacy Policy
             </Link>
             <Link 
               to="/terms" 
-              className="text-white/70 hover:text-white transition-colors duration-300 font-medium uppercase tracking-wider"
+              className="text-white/70 hover:text-csv-orange-400 transition-colors duration-300 font-medium uppercase tracking-wider"
             >
               Terms of Service
             </Link>
             <a 
               href="mailto:support@csvdrop.com" 
-              className="text-white/70 hover:text-white transition-colors duration-300 font-medium uppercase tracking-wider"
+              className="text-white/70 hover:text-csv-orange-400 transition-colors duration-300 font-medium uppercase tracking-wider"
             >
               Contact
             </a>

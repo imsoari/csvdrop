@@ -50,12 +50,12 @@ const Navbar: React.FC<NavbarProps> = ({ onDashboardClick, onAuthClick }) => {
       pro: { 
         text: 'PRO', 
         icon: Crown,
-        color: 'bg-gradient-to-r from-yellow-400 to-orange-500 text-black'
+        color: 'bg-csv-gradient text-black'
       },
       single: { 
         text: 'PAID', 
         icon: Crown,
-        color: 'bg-gradient-to-r from-emerald-400 to-cyan-500 text-black'
+        color: 'bg-csv-gradient text-black'
       }
     };
     
@@ -85,11 +85,11 @@ const Navbar: React.FC<NavbarProps> = ({ onDashboardClick, onAuthClick }) => {
           
           {/* Logo Section */}
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-xl flex items-center justify-center shadow-2xl">
+            <div className="w-12 h-12 bg-csv-gradient rounded-xl flex items-center justify-center shadow-2xl">
               <FileText className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-black text-white tracking-tighter">
+              <h1 className="text-2xl font-monument font-black text-white tracking-tighter">
                 CSVDROP
               </h1>
               <p className="text-xs text-white/60 hidden sm:block font-medium uppercase tracking-wider">CSV PROCESSING PLATFORM</p>
@@ -115,13 +115,13 @@ const Navbar: React.FC<NavbarProps> = ({ onDashboardClick, onAuthClick }) => {
                 >
                   {/* User Avatar */}
                   <div className="relative">
-                    <div className="w-10 h-10 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-xl flex items-center justify-center shadow-2xl text-white font-black text-sm">
+                    <div className="w-10 h-10 bg-csv-gradient rounded-xl flex items-center justify-center shadow-2xl text-white font-black text-sm">
                       {getUserInitials()}
                     </div>
                     
                     {/* Verification Badge */}
                     {profile?.kyc_verified && (
-                      <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-emerald-400 to-cyan-500 rounded-full flex items-center justify-center shadow-2xl border-2 border-black">
+                      <div className="absolute -top-1 -right-1 w-5 h-5 bg-csv-gradient rounded-full flex items-center justify-center shadow-2xl border-2 border-black">
                         <Check className="w-3 h-3 text-black" />
                       </div>
                     )}
@@ -151,12 +151,12 @@ const Navbar: React.FC<NavbarProps> = ({ onDashboardClick, onAuthClick }) => {
                     <div className="px-8 py-6 border-b border-white/10">
                       <div className="flex items-center gap-6">
                         <div className="relative">
-                          <div className="w-16 h-16 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-2xl text-white font-black text-lg">
+                          <div className="w-16 h-16 bg-csv-gradient rounded-2xl flex items-center justify-center shadow-2xl text-white font-black text-lg">
                             {getUserInitials()}
                           </div>
                           
                           {profile?.kyc_verified && (
-                            <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-emerald-400 to-cyan-500 rounded-full flex items-center justify-center shadow-2xl border-2 border-black">
+                            <div className="absolute -top-2 -right-2 w-6 h-6 bg-csv-gradient rounded-full flex items-center justify-center shadow-2xl border-2 border-black">
                               <Check className="w-4 h-4 text-black" />
                             </div>
                           )}
