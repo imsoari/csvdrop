@@ -1,0 +1,16 @@
+<svg width="192" height="192" viewBox="0 0 192 192" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="192" height="192" rx="40" fill="#7c3aed"/>
+  
+  <!-- Icon -->
+  <rect x="48" y="48" width="96" height="96" rx="20" fill="white"/>
+  
+  <!-- CSV Lines -->
+  <rect x="64" y="72" width="64" height="6" rx="3" fill="#7c3aed"/>
+  <rect x="64" y="88" width="48" height="6" rx="3" fill="#7c3aed"/>
+  <rect x="64" y="104" width="56" height="6" rx="3" fill="#7c3aed"/>
+  <rect x="64" y="120" width="40" height="6" rx="3" fill="#7c3aed"/>
+  
+  <!-- Merge Arrow -->
+  <path d="M96 140 L96 155 L110 148 Z" fill="#ec4899"/>
+</svg>
