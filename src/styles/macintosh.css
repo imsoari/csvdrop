@@ -1,0 +1,330 @@
+/**
+ * Macintosh Theme CSS
+ * Early Macintosh UI styling (1984-1992) with bitmap fonts and pixel-perfect UI
+ */
+
+/* Font Declarations */
+@font-face {
+  font-family: 'Chicago';
+  src: url('/fonts/Chicago.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Geneva';
+  src: url('/fonts/Geneva.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SFPixel';
+  src: url('/fonts/SFPixel.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Mac Theme Base */
+.mac-theme {
+  font-family: 'Chicago', monospace;
+  background-color: #dfdfdf; /* Warm Light Gray */
+  color: #1b1b1b; /* Deep Black */
+  image-rendering: pixelated;
+  background-image: url('/patterns/grid.svg');
+  background-size: 20px 20px;
+  background-repeat: repeat;
+}
+
+/* Mac Window */
+.mac-window {
+  background-color: #f3f3f3; /* Soft White */
+  border: 2px solid #1b1b1b; /* Deep Black */
+  border-radius: 0;
+  box-shadow: 4px 4px 0 rgba(27, 27, 27, 0.5); /* Deep Black with opacity */
+  padding: 0;
+  position: relative;
+}
+
+.mac-window-title {
+  background-color: #1b1b1b; /* Deep Black */
+  color: #f3f3f3; /* Soft White */
+  font-family: 'Chicago', monospace;
+  font-size: 14px;
+  text-align: center;
+  padding: 2px 0;
+  position: relative;
+  cursor: default;
+}
+
+.mac-window-content {
+  padding: 10px;
+  font-family: 'Geneva', sans-serif;
+  font-size: 12px;
+}
+
+/* Mac Buttons */
+.mac-button {
+  background-color: #f3f3f3; /* Soft White */
+  border: 2px solid #1b1b1b; /* Deep Black */
+  border-radius: 0;
+  padding: 4px 12px;
+  font-family: 'Chicago', monospace;
+  font-size: 12px;
+  color: #1b1b1b; /* Deep Black */
+  cursor: pointer;
+  text-align: center;
+  box-shadow: 2px 2px 0 rgba(27, 27, 27, 0.5); /* Deep Black with opacity */
+  transition: all 0.1s;
+}
+
+.mac-button:hover {
+  background-color: #b3b3b3; /* Retro Gray */
+}
+
+.mac-button:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
+}
+
+/* Mac Form Controls */
+.mac-input {
+  background-color: #f3f3f3; /* Soft White */
+  border: 2px solid #1b1b1b; /* Deep Black */
+  border-radius: 0;
+  padding: 4px 8px;
+  font-family: 'Geneva', sans-serif;
+  font-size: 12px;
+  color: #1b1b1b; /* Deep Black */
+}
+
+.mac-input:focus {
+  outline: none;
+  background-color: #66ff99; /* Soft Mint Gradient */
+}
+
+.mac-select {
+  background-color: #f3f3f3; /* Soft White */
+  border: 2px solid #1b1b1b; /* Deep Black */
+  border-radius: 0;
+  padding: 4px 8px;
+  font-family: 'Geneva', sans-serif;
+  font-size: 12px;
+  color: #1b1b1b; /* Deep Black */
+  background-image: url('/icons/mac-dropdown.svg');
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 12px;
+  padding-right: 24px;
+  appearance: none;
+}
+
+/* Mac Icons */
+.mac-icon {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.mac-icon-computer {
+  background-image: url('/icons/mac-computer.svg');
+}
+
+.mac-icon-floppy {
+  background-image: url('/icons/mac-floppy.svg');
+}
+
+.mac-icon-csv {
+  background-image: url('/icons/mac-csv.svg');
+}
+
+.mac-icon-key {
+  background-image: url('/icons/mac-key.svg');
+}
+
+.mac-icon-folder {
+  background-image: url('/icons/mac-folder.svg');
+}
+
+.mac-icon-error {
+  background-image: url('/icons/mac-error.svg');
+}
+
+.mac-icon-success {
+  background-image: url('/icons/mac-success.svg');
+}
+
+.mac-icon-ai {
+  background-image: url('/icons/mac-ai.svg');
+}
+
+/* Mac Loading Screen */
+.mac-loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #dfdfdf; /* Warm Light Gray */
+  background-image: url('/patterns/grid.svg');
+  background-size: 20px 20px;
+}
+
+.mac-loading {
+  background-color: #f3f3f3; /* Soft White */
+  border: 2px solid #1b1b1b; /* Deep Black */
+  border-radius: 0;
+  box-shadow: 4px 4px 0 rgba(27, 27, 27, 0.5); /* Deep Black with opacity */
+  padding: 20px;
+  text-align: center;
+  width: 200px;
+}
+
+.mac-loading-icon {
+  width: 64px;
+  height: 64px;
+  background-image: url('/icons/mac-computer.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin: 0 auto 16px;
+  animation: mac-blink 1.5s infinite;
+}
+
+.mac-loading-text {
+  font-family: 'Chicago', monospace;
+  font-size: 14px;
+  color: #1b1b1b; /* Deep Black */
+}
+
+@keyframes mac-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Mac Sound Control */
+.mac-sound-control {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #f3f3f3; /* Soft White */
+  border: 2px solid #1b1b1b; /* Deep Black */
+  border-radius: 0;
+  padding: 4px 8px;
+  font-family: 'Chicago', monospace;
+  font-size: 12px;
+  color: #1b1b1b; /* Deep Black */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  box-shadow: 2px 2px 0 rgba(27, 27, 27, 0.5); /* Deep Black with opacity */
+  z-index: 1000;
+}
+
+.mac-sound-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 6px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.mac-sound-on {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 2 L4 6 L1 6 L1 10 L4 10 L8 14 Z' fill='%231b1b1b'/%3E%3Cpath d='M10 4 Q12 8 10 12' stroke='%231b1b1b' stroke-width='1' fill='none'/%3E%3Cpath d='M12 2 Q15 8 12 14' stroke='%231b1b1b' stroke-width='1' fill='none'/%3E%3C/svg%3E");
+}
+
+.mac-sound-off {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 2 L4 6 L1 6 L1 10 L4 10 L8 14 Z' fill='%231b1b1b'/%3E%3Cpath d='M10 4 L14 12' stroke='%231b1b1b' stroke-width='1'/%3E%3Cpath d='M14 4 L10 12' stroke='%231b1b1b' stroke-width='1'/%3E%3C/svg%3E");
+}
+
+/* AI Assistant Styling */
+.mac-ai-assistant {
+  border: 2px solid #1b1b1b; /* Deep Black */
+  background-color: #f3f3f3; /* Soft White */
+  padding: 10px;
+  box-shadow: 4px 4px 0 rgba(27, 27, 27, 0.5); /* Deep Black with opacity */
+  position: relative;
+}
+
+.mac-ai-assistant::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 20px;
+  background-color: #00ff9f; /* Terminal Green */
+  opacity: 0.3;
+  background-image: url('/patterns/scanlines.svg');
+  background-size: 4px 4px;
+}
+
+.mac-ai-text {
+  font-family: 'SFPixel', monospace;
+  color: #1b1b1b; /* Deep Black */
+  line-height: 1.4;
+}
+
+/* Mac Modal */
+.mac-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(27, 27, 27, 0.5); /* Deep Black with opacity */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.mac-modal {
+  background-color: #f3f3f3; /* Soft White */
+  border: 2px solid #1b1b1b; /* Deep Black */
+  box-shadow: 6px 6px 0 rgba(27, 27, 27, 0.5); /* Deep Black with opacity */
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+}
+
+.mac-modal-title {
+  background-color: #1b1b1b; /* Deep Black */
+  color: #f3f3f3; /* Soft White */
+  font-family: 'Chicago', monospace;
+  font-size: 14px;
+  text-align: center;
+  padding: 4px 0;
+}
+
+.mac-modal-content {
+  padding: 20px;
+  font-family: 'Geneva', sans-serif;
+  font-size: 12px;
+}
+
+.mac-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 20px 20px;
+  gap: 10px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .mac-modal {
+    width: 95%;
+    max-width: none;
+  }
+  
+  .mac-button {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+}

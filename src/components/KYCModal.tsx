@@ -253,14 +253,14 @@ const KYCModal: React.FC<KYCModalProps> = ({
            }}>
         
         {/* Header */}
-        <div className="p-4 sm:p-6 border-b border-white/30 bg-gradient-to-r from-blue-50/80 to-indigo-50/80">
+        <div className="p-4 sm:p-6 border-b border-white/30 bg-csv-orange-500/20 backdrop-blur-2xl">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 sm:p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl shadow-lg">
+              <div className="p-2 sm:p-3 bg-csv-gradient rounded-2xl shadow-lg">
                 <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </div>
               <div>
-                <h2 className="text-lg sm:text-2xl font-bold text-gray-900">Identity Verification</h2>
+                <h2 className="text-lg sm:text-2xl font-monument font-black text-gray-900">Identity Verification</h2>
                 <p className="text-gray-600 text-xs sm:text-sm">Secure verification required</p>
               </div>
             </div>
@@ -277,10 +277,10 @@ const KYCModal: React.FC<KYCModalProps> = ({
         <div className="p-4 sm:p-6">
           {/* Header */}
           <div className="text-center mb-6 sm:mb-8">
-            <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl shadow-lg mb-3 sm:mb-4">
+            <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-csv-gradient rounded-2xl shadow-lg mb-3 sm:mb-4">
               <User className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
             </div>
-            <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
+            <h3 className="text-lg sm:text-xl font-monument font-black text-gray-900 mb-2">
               Tell us about yourself
             </h3>
             <p className="text-sm sm:text-base text-gray-600">
@@ -289,16 +289,16 @@ const KYCModal: React.FC<KYCModalProps> = ({
           </div>
 
           {/* Notice */}
-          <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 rounded-2xl border border-blue-200/50"
+          <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-csv-orange-50/80 rounded-2xl border border-csv-orange-200/50"
                style={{
-                 background: 'linear-gradient(135deg, rgba(59,130,246,0.1) 0%, rgba(99,102,241,0.1) 100%)',
+                 background: 'linear-gradient(135deg, rgba(249,115,22,0.1) 0%, rgba(234,88,12,0.1) 100%)',
                  boxShadow: '0 8px 20px -5px rgba(59,130,246,0.2), inset 0 1px 0 rgba(255,255,255,0.6)'
                }}>
             <div className="flex items-start gap-3">
-              <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+              <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-csv-orange-600 mt-0.5 flex-shrink-0" />
               <div>
-                <h4 className="font-semibold text-blue-800 mb-1 text-sm sm:text-base">Why do we need this?</h4>
-                <p className="text-xs sm:text-sm text-blue-700">
+                <h4 className="font-semibold text-csv-orange-800 mb-1 text-sm sm:text-base">Why do we need this?</h4>
+                <p className="text-xs sm:text-sm text-csv-orange-700">
                   To ensure secure file processing and comply with data protection regulations, 
                   we require legitimate verification information for all downloads.
                 </p>
@@ -319,10 +319,10 @@ const KYCModal: React.FC<KYCModalProps> = ({
                   value={formData.firstName}
                   onChange={(e) => handleInputChange('firstName', e.target.value)}
                   onBlur={() => handleBlur('firstName')}
-                  className={`w-full px-3 sm:px-4 py-2 sm:py-3 bg-white/80 border rounded-xl focus:ring-2 focus:ring-blue-500 transition-all duration-300 text-sm sm:text-base ${
+                  className={`w-full px-3 sm:px-4 py-2 sm:py-3 bg-white/80 border rounded-xl focus:ring-2 focus:ring-csv-orange-500 transition-all duration-300 text-sm sm:text-base ${
                     getFieldError('firstName') 
                       ? 'border-red-300 focus:border-red-500' 
-                      : 'border-gray-300 focus:border-blue-500'
+                      : 'border-gray-300 focus:border-csv-orange-500'
                   }`}
                   placeholder="John"
                   maxLength={50}
@@ -344,10 +344,10 @@ const KYCModal: React.FC<KYCModalProps> = ({
                   value={formData.lastName}
                   onChange={(e) => handleInputChange('lastName', e.target.value)}
                   onBlur={() => handleBlur('lastName')}
-                  className={`w-full px-3 sm:px-4 py-2 sm:py-3 bg-white/80 border rounded-xl focus:ring-2 focus:ring-blue-500 transition-all duration-300 text-sm sm:text-base ${
+                  className={`w-full px-3 sm:px-4 py-2 sm:py-3 bg-white/80 border rounded-xl focus:ring-2 focus:ring-csv-orange-500 transition-all duration-300 text-sm sm:text-base ${
                     getFieldError('lastName') 
                       ? 'border-red-300 focus:border-red-500' 
-                      : 'border-gray-300 focus:border-blue-500'
+                      : 'border-gray-300 focus:border-csv-orange-500'
                   }`}
                   placeholder="Doe"
                   maxLength={50}
@@ -376,7 +376,7 @@ const KYCModal: React.FC<KYCModalProps> = ({
                     ? 'border-red-300 focus:border-red-500 focus:ring-red-200' 
                     : formData.email && validateEmail(formData.email)
                     ? 'border-green-300 focus:border-green-500 focus:ring-green-200'
-                    : 'border-gray-300 focus:border-blue-500 focus:ring-blue-200'
+                    : 'border-gray-300 focus:border-csv-orange-500 focus:ring-blue-200'
                 }`}
                 placeholder="john.doe@example.com"
                 maxLength={100}
@@ -403,7 +403,7 @@ const KYCModal: React.FC<KYCModalProps> = ({
             className={`w-full mt-6 sm:mt-8 py-3 sm:py-4 rounded-2xl font-bold text-base sm:text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-3 ${
               !isFormValidState || isSubmitting
                 ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                : 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white hover:from-blue-600 hover:to-indigo-700'
+                : 'bg-csv-gradient text-white hover:bg-csv-orange-600'
             }`}
           >
             {isSubmitting ? (

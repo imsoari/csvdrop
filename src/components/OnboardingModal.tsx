@@ -30,19 +30,19 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
     {
       title: "Welcome to CSVDROP",
       description: "Merge multiple CSV files into one organized dataset",
-      icon: <FileText className="w-12 h-12 text-white" />,
+      icon: <FileText className="w-12 h-12 text-gray-900" />,
       gradient: "bg-csv-gradient"
     },
     {
       title: "Simple 3-Step Process",
       description: "Upload → Configure → Download",
-      icon: <Zap className="w-12 h-12 text-white" />,
+      icon: <Zap className="w-12 h-12 text-gray-900" />,
       gradient: "bg-csv-gradient"
     },
     {
       title: "Choose Your Plan",
       description: "Start free or upgrade for unlimited downloads",
-      icon: <Crown className="w-12 h-12 text-white" />,
+      icon: <Crown className="w-12 h-12 text-gray-900" />,
       gradient: "bg-csv-gradient"
     }
   ];
@@ -113,7 +113,7 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-csv-gradient rounded-xl shadow-lg">
-                <Sparkles className="w-5 h-5 text-white" />
+                <Sparkles className="w-5 h-5 text-gray-900" />
               </div>
               <h2 className="text-xl font-monument font-black text-gray-900">Quick Setup</h2>
             </div>
@@ -142,7 +142,7 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
         {/* Content */}
         <div className="p-4 sm:p-6 text-center">
           <div className={`inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br ${steps[currentStep].gradient} rounded-3xl shadow-lg mb-4 sm:mb-6 transform hover:rotate-6 transition-transform duration-300`}>
-            {steps[currentStep].icon}
+            <div className="text-gray-900">{steps[currentStep].icon}</div>
           </div>
           
           <h3 className="text-xl sm:text-2xl font-monument font-black text-gray-900 mb-3 sm:mb-4">
@@ -176,7 +176,7 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
                 <div className="flex items-center justify-between mb-2 sm:mb-3">
                   <div className="flex items-center gap-3">
                     <div className="p-2 bg-csv-gradient rounded-xl shadow-lg">
-                      <Zap className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                      <Zap className="w-4 h-4 sm:w-5 sm:h-5 text-gray-900" />
                     </div>
                     <div className="text-left">
                       <div className="text-base sm:text-lg font-bold text-gray-900">Free Plan</div>
@@ -231,7 +231,7 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
                 <div className="flex items-center justify-between mb-2 sm:mb-3">
                   <div className="flex items-center gap-3">
                     <div className="p-2 bg-csv-gradient rounded-xl shadow-lg">
-                      <Crown className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                      <Crown className="w-4 h-4 sm:w-5 sm:h-5 text-gray-900" />
                     </div>
                     <div className="text-left">
                       <div className="text-base sm:text-lg font-bold text-gray-900">Pro Plan</div>

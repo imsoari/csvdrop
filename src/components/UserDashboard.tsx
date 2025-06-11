@@ -203,8 +203,8 @@ const UserDashboard: React.FC<UserDashboardProps> = ({ onShowPayment, onShowDown
   };
 
   const handleStartProcessing = () => {
-    setShowDashboard(false);
-    // Reset any existing state to start fresh
+    // Keep the user in the dashboard but reset the processing state
+    // Don't set showDashboard to false as that causes redirection issues
     resetFiles();
   };
 

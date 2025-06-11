@@ -195,11 +195,11 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess }) => 
         <div className="p-6 border-b border-white/30 bg-white/30 backdrop-blur-xl">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-slate-800 rounded-2xl flex items-center justify-center shadow-lg">
+              <div className="w-12 h-12 bg-csv-gradient rounded-2xl flex items-center justify-center shadow-lg">
                 {mode === 'reset' ? <RefreshCw className="w-6 h-6 text-white" /> : <User className="w-6 h-6 text-white" />}
               </div>
               <div>
-                <h2 className="text-2xl font-light text-slate-900">{getTitle()}</h2>
+                <h2 className="text-2xl font-monument font-black text-slate-900">{getTitle()}</h2>
                 <p className="text-slate-600 text-sm font-light">{getSubtitle()}</p>
               </div>
             </div>
@@ -256,8 +256,8 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess }) => 
                     type="text"
                     value={formData.firstName}
                     onChange={(e) => handleInputChange('firstName', e.target.value)}
-                    className={`w-full px-4 py-3 bg-white/60 backdrop-blur-xl border rounded-xl focus:ring-2 focus:ring-slate-500 transition-all duration-300 ${
-                      errors.firstName ? 'border-red-300 focus:border-red-500' : 'border-white/30 focus:border-slate-500'
+                    className={`w-full px-4 py-3 bg-white/60 backdrop-blur-xl border rounded-xl focus:ring-2 focus:ring-csv-orange-500 transition-all duration-300 ${
+                      errors.firstName ? 'border-red-300 focus:border-red-500' : 'border-white/30 focus:border-csv-orange-500'
                     }`}
                     placeholder="John"
                   />
@@ -276,8 +276,8 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess }) => 
                     type="text"
                     value={formData.lastName}
                     onChange={(e) => handleInputChange('lastName', e.target.value)}
-                    className={`w-full px-4 py-3 bg-white/60 backdrop-blur-xl border rounded-xl focus:ring-2 focus:ring-slate-500 transition-all duration-300 ${
-                      errors.lastName ? 'border-red-300 focus:border-red-500' : 'border-white/30 focus:border-slate-500'
+                    className={`w-full px-4 py-3 bg-white/60 backdrop-blur-xl border rounded-xl focus:ring-2 focus:ring-csv-orange-500 transition-all duration-300 ${
+                      errors.lastName ? 'border-red-300 focus:border-red-500' : 'border-white/30 focus:border-csv-orange-500'
                     }`}
                     placeholder="Doe"
                   />
@@ -300,8 +300,8 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess }) => 
                 type="email"
                 value={formData.email}
                 onChange={(e) => handleInputChange('email', e.target.value)}
-                className={`w-full px-4 py-3 bg-white/60 backdrop-blur-xl border rounded-xl focus:ring-2 focus:ring-slate-500 transition-all duration-300 ${
-                  errors.email ? 'border-red-300 focus:border-red-500' : 'border-white/30 focus:border-slate-500'
+                className={`w-full px-4 py-3 bg-white/60 backdrop-blur-xl border rounded-xl focus:ring-2 focus:ring-csv-orange-500 transition-all duration-300 ${
+                  errors.email ? 'border-red-300 focus:border-red-500' : 'border-white/30 focus:border-csv-orange-500'
                 }`}
                 placeholder="john.doe@example.com"
               />
@@ -324,15 +324,15 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess }) => 
                     type={showPassword ? 'text' : 'password'}
                     value={formData.password}
                     onChange={(e) => handleInputChange('password', e.target.value)}
-                    className={`w-full px-4 py-3 pr-12 bg-white/60 backdrop-blur-xl border rounded-xl focus:ring-2 focus:ring-slate-500 transition-all duration-300 ${
-                      errors.password ? 'border-red-300 focus:border-red-500' : 'border-white/30 focus:border-slate-500'
+                    className={`w-full px-4 py-3 pr-12 bg-white/60 backdrop-blur-xl border rounded-xl focus:ring-2 focus:ring-csv-orange-500 transition-all duration-300 ${
+                      errors.password ? 'border-red-300 focus:border-red-500' : 'border-white/30 focus:border-csv-orange-500'
                     }`}
                     placeholder="Enter your password"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-csv-orange-400 hover:text-csv-orange-600"
                   >
                     {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
@@ -362,15 +362,15 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess }) => 
                     type={showConfirmPassword ? 'text' : 'password'}
                     value={formData.confirmPassword}
                     onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
-                    className={`w-full px-4 py-3 pr-12 bg-white/60 backdrop-blur-xl border rounded-xl focus:ring-2 focus:ring-slate-500 transition-all duration-300 ${
-                      errors.confirmPassword ? 'border-red-300 focus:border-red-500' : 'border-white/30 focus:border-slate-500'
+                    className={`w-full px-4 py-3 pr-12 bg-white/60 backdrop-blur-xl border rounded-xl focus:ring-2 focus:ring-csv-orange-500 transition-all duration-300 ${
+                      errors.confirmPassword ? 'border-red-300 focus:border-red-500' : 'border-white/30 focus:border-csv-orange-500'
                     }`}
                     placeholder="Confirm your password"
                   />
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-csv-orange-400 hover:text-csv-orange-600"
                   >
                     {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
@@ -387,7 +387,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess }) => 
             <button
               type="submit"
               disabled={isLoading || resetEmailSent}
-              className="w-full py-4 bg-slate-800 text-white rounded-2xl font-medium text-lg hover:bg-slate-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+              className="w-full py-4 bg-csv-gradient text-white rounded-2xl font-medium text-lg hover:bg-csv-orange-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
             >
               {isLoading ? (
                 <>
@@ -414,7 +414,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess }) => 
               <>
                 <button
                   onClick={() => switchMode('reset')}
-                  className="text-slate-600 hover:text-slate-800 font-medium transition-colors duration-300 text-sm"
+                  className="text-slate-600 hover:text-csv-orange-500 font-medium transition-colors duration-300 text-sm"
                 >
                   Forgot your password?
                 </button>
@@ -422,7 +422,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess }) => 
                   Don't have an account?
                   <button
                     onClick={() => switchMode('signup')}
-                    className="ml-2 text-slate-800 hover:text-slate-900 font-medium transition-colors duration-300"
+                    className="ml-2 text-slate-800 hover:text-csv-orange-600 font-medium transition-colors duration-300"
                   >
                     Sign Up
                   </button>
@@ -435,7 +435,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess }) => 
                 Already have an account?
                 <button
                   onClick={() => switchMode('signin')}
-                  className="ml-2 text-slate-800 hover:text-slate-900 font-medium transition-colors duration-300"
+                  className="ml-2 text-slate-800 hover:text-csv-orange-600 font-medium transition-colors duration-300"
                 >
                   Sign In
                 </button>
@@ -447,7 +447,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess }) => 
                 Remember your password?
                 <button
                   onClick={() => switchMode('signin')}
-                  className="ml-2 text-slate-800 hover:text-slate-900 font-medium transition-colors duration-300"
+                  className="ml-2 text-slate-800 hover:text-csv-orange-600 font-medium transition-colors duration-300"
                 >
                   Sign In
                 </button>
