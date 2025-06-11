@@ -37,25 +37,25 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
       title: "Welcome to CSVDROP",
       description: "Merge multiple CSV files into one organized dataset",
       icon: <FileText className="w-12 h-12 text-white" />,
-      gradient: "from-violet-500 to-purple-600"
+      gradient: "bg-csv-gradient"
     },
     {
       title: "Simple 3-Step Process",
       description: "Upload → Configure → Download",
       icon: <Zap className="w-12 h-12 text-white" />,
-      gradient: "from-blue-500 to-indigo-600"
+      gradient: "bg-csv-gradient"
     },
     {
       title: "Choose Your Plan",
       description: "Start free or upgrade for unlimited downloads",
       icon: <Crown className="w-12 h-12 text-white" />,
-      gradient: "from-emerald-500 to-teal-600"
+      gradient: "bg-csv-gradient"
     },
     {
       title: "Complete Your Profile",
       description: "Quick verification to secure your account",
       icon: <User className="w-12 h-12 text-white" />,
-      gradient: "from-orange-500 to-red-600"
+      gradient: "bg-csv-gradient"
     }
   ];
 
@@ -91,6 +91,7 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
       
       if (selectedPlan === 'pro') {
         try {
+          // Ensure we're using the correct product ID from STRIPE_PRODUCTS
           await createCheckoutSession('pro', userEmail, userName);
           // User will be redirected to Stripe
           return;
@@ -146,13 +147,13 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
            }}>
         
         {/* Header */}
-        <div className="p-4 sm:p-6 border-b border-white/30 bg-gradient-to-r from-gray-50/80 to-gray-100/80">
+        <div className="p-4 sm:p-6 border-b border-white/30 bg-csv-orange-500/20 backdrop-blur-2xl">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-gradient-to-br from-violet-500 to-purple-600 rounded-xl shadow-lg">
+              <div className="p-2 bg-csv-gradient rounded-xl shadow-lg">
                 <Sparkles className="w-5 h-5 text-white" />
               </div>
-              <h2 className="text-xl font-bold text-gray-900">Quick Setup</h2>
+              <h2 className="text-xl font-monument font-black text-gray-900">Quick Setup</h2>
             </div>
             <button
               onClick={onClose}
@@ -169,7 +170,7 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2">
               <div 
-                className="bg-gradient-to-r from-violet-500 to-purple-600 h-2 rounded-full transition-all duration-500"
+                className="bg-csv-gradient h-2 rounded-full transition-all duration-500"
                 style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
               ></div>
             </div>
@@ -182,7 +183,7 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
             {steps[currentStep].icon}
           </div>
           
-          <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">
+          <h3 className="text-xl sm:text-2xl font-monument font-black text-gray-900 mb-3 sm:mb-4">
             {steps[currentStep].title}
           </h3>
           
@@ -198,45 +199,45 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
                 onClick={() => handlePlanSelect('free')}
                 className={`w-full p-4 sm:p-6 rounded-2xl border-2 transition-all duration-300 transform hover:scale-[1.02] ${
                   selectedPlan === 'free'
-                    ? 'border-blue-400 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 shadow-lg'
-                    : 'border-gray-200 bg-white/60 hover:border-blue-300'
+                    ? 'border-csv-orange-400 bg-csv-orange-50/80 shadow-lg'
+                    : 'border-gray-200 bg-white/60 hover:border-csv-orange-300'
                 }`}
                 style={{
                   background: selectedPlan === 'free' 
-                    ? 'linear-gradient(135deg, rgba(99,102,241,0.1) 0%, rgba(139,92,246,0.1) 100%)'
+                    ? 'linear-gradient(135deg, rgba(249,115,22,0.1) 0%, rgba(234,88,12,0.1) 100%)'
                     : 'linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.6) 100%)',
                   boxShadow: selectedPlan === 'free'
-                    ? '0 15px 35px -5px rgba(99,102,241,0.3), inset 0 1px 0 rgba(255,255,255,0.6)'
+                    ? '0 15px 35px -5px rgba(249,115,22,0.3), inset 0 1px 0 rgba(255,255,255,0.6)'
                     : '0 8px 20px -5px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)'
                 }}
               >
                 <div className="flex items-center justify-between mb-2 sm:mb-3">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-lg">
+                    <div className="p-2 bg-csv-gradient rounded-xl shadow-lg">
                       <Zap className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                     </div>
                     <div className="text-left">
                       <div className="text-base sm:text-lg font-bold text-gray-900">Free Plan</div>
-                      <div className="text-xs sm:text-sm text-blue-600 font-medium">Perfect to try it out</div>
+                      <div className="text-xs sm:text-sm text-csv-orange-600 font-medium">Perfect to try it out</div>
                     </div>
                   </div>
                   {selectedPlan === 'free' && (
-                    <div className="p-1 bg-blue-500 rounded-full">
+                    <div className="p-1 bg-csv-orange-500 rounded-full">
                       <Check className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
                     </div>
                   )}
                 </div>
                 <div className="text-left space-y-1 sm:space-y-2">
                   <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-700">
-                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-blue-500" />
+                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-csv-orange-500" />
                     <span>1 free download</span>
                   </div>
                   <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-700">
-                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-blue-500" />
+                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-csv-orange-500" />
                     <span>All consolidation features</span>
                   </div>
                   <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-700">
-                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-blue-500" />
+                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-csv-orange-500" />
                     <span>No credit card required</span>
                   </div>
                 </div>
@@ -247,53 +248,53 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
                 onClick={() => handlePlanSelect('pro')}
                 className={`w-full p-4 sm:p-6 rounded-2xl border-2 transition-all duration-300 transform hover:scale-[1.02] relative ${
                   selectedPlan === 'pro'
-                    ? 'border-purple-400 bg-gradient-to-r from-purple-50/80 to-pink-50/80 shadow-lg'
-                    : 'border-gray-200 bg-white/60 hover:border-purple-300'
+                    ? 'border-csv-orange-400 bg-csv-orange-50/80 shadow-lg'
+                    : 'border-gray-200 bg-white/60 hover:border-csv-orange-300'
                 }`}
                 style={{
                   background: selectedPlan === 'pro' 
-                    ? 'linear-gradient(135deg, rgba(139,92,246,0.1) 0%, rgba(168,85,247,0.1) 100%)'
+                    ? 'linear-gradient(135deg, rgba(249,115,22,0.1) 0%, rgba(234,88,12,0.1) 100%)'
                     : 'linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.6) 100%)',
                   boxShadow: selectedPlan === 'pro'
-                    ? '0 15px 35px -5px rgba(139,92,246,0.3), inset 0 1px 0 rgba(255,255,255,0.6)'
+                    ? '0 15px 35px -5px rgba(249,115,22,0.3), inset 0 1px 0 rgba(255,255,255,0.6)'
                     : '0 8px 20px -5px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)'
                 }}
               >
                 <div className="absolute -top-2 sm:-top-3 left-1/2 transform -translate-x-1/2">
-                  <span className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-2 sm:px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                  <span className="bg-csv-gradient text-white px-2 sm:px-3 py-1 rounded-full text-xs font-bold shadow-lg">
                     RECOMMENDED
                   </span>
                 </div>
                 
                 <div className="flex items-center justify-between mb-2 sm:mb-3">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl shadow-lg">
+                    <div className="p-2 bg-csv-gradient rounded-xl shadow-lg">
                       <Crown className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                     </div>
                     <div className="text-left">
                       <div className="text-base sm:text-lg font-bold text-gray-900">Pro Plan</div>
-                      <div className="text-xs sm:text-sm text-purple-600 font-medium">
+                      <div className="text-xs sm:text-sm text-csv-orange-600 font-medium">
                         ${formatPrice(STRIPE_PRODUCTS.pro.price)}/{STRIPE_PRODUCTS.pro.interval}
                       </div>
                     </div>
                   </div>
                   {selectedPlan === 'pro' && (
-                    <div className="p-1 bg-purple-500 rounded-full">
+                    <div className="p-1 bg-csv-orange-500 rounded-full">
                       <Check className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
                     </div>
                   )}
                 </div>
                 <div className="text-left space-y-1 sm:space-y-2">
                   <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-700">
-                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-purple-500" />
+                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-csv-orange-500" />
                     <span>Unlimited downloads</span>
                   </div>
                   <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-700">
-                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-purple-500" />
+                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-csv-orange-500" />
                     <span>Priority processing</span>
                   </div>
                   <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-700">
-                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-purple-500" />
+                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-csv-orange-500" />
                     <span>Secure Stripe checkout</span>
                   </div>
                 </div>
@@ -301,18 +302,18 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
 
               {/* Stripe Notice for Pro Plan */}
               {selectedPlan === 'pro' && (
-                <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 rounded-2xl border border-blue-200/50"
+                <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-csv-orange-50/80 rounded-2xl border border-csv-orange-200/50"
                      style={{
-                       background: 'linear-gradient(135deg, rgba(99,102,241,0.1) 0%, rgba(139,92,246,0.1) 100%)',
-                       boxShadow: '0 8px 20px -5px rgba(99,102,241,0.2), inset 0 1px 0 rgba(255,255,255,0.6)'
+                       background: 'linear-gradient(135deg, rgba(249,115,22,0.1) 0%, rgba(234,88,12,0.1) 100%)',
+                       boxShadow: '0 8px 20px -5px rgba(249,115,22,0.2), inset 0 1px 0 rgba(255,255,255,0.6)'
                      }}>
                   <div className="flex items-center gap-3">
-                    <div className="p-2 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl">
+                    <div className="p-2 bg-csv-gradient rounded-xl">
                       <ExternalLink className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
                     </div>
                     <div>
-                      <p className="text-xs sm:text-sm font-semibold text-blue-800">Secure Stripe Checkout</p>
-                      <p className="text-xs text-blue-600">You'll be redirected to complete payment securely</p>
+                      <p className="text-xs sm:text-sm font-semibold text-csv-orange-800">Secure Stripe Checkout</p>
+                      <p className="text-xs text-csv-orange-600">You'll be redirected to complete payment securely</p>
                     </div>
                   </div>
                 </div>
@@ -323,12 +324,12 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
           {/* KYC Form */}
           {currentStep === 3 && (
             <div className="space-y-4 mb-6 text-left">
-              <div className="p-4 bg-gradient-to-r from-blue-50/80 to-indigo-50/80 rounded-2xl border border-blue-200/50 mb-6">
+              <div className="p-4 bg-csv-orange-50/80 rounded-2xl border border-csv-orange-200/50 mb-6">
                 <div className="flex items-center gap-3">
-                  <AlertCircle className="w-5 h-5 text-blue-600" />
+                  <AlertCircle className="w-5 h-5 text-csv-orange-600" />
                   <div>
-                    <p className="text-sm font-semibold text-blue-800">Quick Verification Required</p>
-                    <p className="text-xs text-blue-600">We need this information to secure your account and enable file processing</p>
+                    <p className="text-sm font-semibold text-csv-orange-800">Quick Verification Required</p>
+                    <p className="text-xs text-csv-orange-600">We need this information to secure your account and enable file processing</p>
                   </div>
                 </div>
               </div>
@@ -342,8 +343,8 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
                     type="text"
                     value={kycData.firstName}
                     onChange={(e) => setKycData(prev => ({ ...prev, firstName: e.target.value }))}
-                    className={`w-full px-3 py-2 bg-white/80 border rounded-xl focus:ring-2 focus:ring-blue-500 transition-all duration-300 ${
-                      kycErrors.firstName ? 'border-red-300 focus:border-red-500' : 'border-gray-300 focus:border-blue-500'
+                    className={`w-full px-3 py-2 bg-white/80 border rounded-xl focus:ring-2 focus:ring-csv-orange-500 transition-all duration-300 ${
+                      kycErrors.firstName ? 'border-red-300 focus:border-red-500' : 'border-gray-300 focus:border-csv-orange-500'
                     }`}
                     placeholder="John"
                   />
@@ -360,8 +361,8 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
                     type="text"
                     value={kycData.lastName}
                     onChange={(e) => setKycData(prev => ({ ...prev, lastName: e.target.value }))}
-                    className={`w-full px-3 py-2 bg-white/80 border rounded-xl focus:ring-2 focus:ring-blue-500 transition-all duration-300 ${
-                      kycErrors.lastName ? 'border-red-300 focus:border-red-500' : 'border-gray-300 focus:border-blue-500'
+                    className={`w-full px-3 py-2 bg-white/80 border rounded-xl focus:ring-2 focus:ring-csv-orange-500 transition-all duration-300 ${
+                      kycErrors.lastName ? 'border-red-300 focus:border-red-500' : 'border-gray-300 focus:border-csv-orange-500'
                     }`}
                     placeholder="Doe"
                   />
@@ -380,8 +381,8 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
                   type="email"
                   value={kycData.email}
                   onChange={(e) => setKycData(prev => ({ ...prev, email: e.target.value }))}
-                  className={`w-full px-3 py-2 bg-white/80 border rounded-xl focus:ring-2 focus:ring-blue-500 transition-all duration-300 ${
-                    kycErrors.email ? 'border-red-300 focus:border-red-500' : 'border-gray-300 focus:border-blue-500'
+                  className={`w-full px-3 py-2 bg-white/80 border rounded-xl focus:ring-2 focus:ring-csv-orange-500 transition-all duration-300 ${
+                    kycErrors.email ? 'border-red-300 focus:border-red-500' : 'border-gray-300 focus:border-csv-orange-500'
                   }`}
                   placeholder="john.doe@example.com"
                 />
@@ -406,7 +407,7 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
               className={`flex-1 py-2 sm:py-3 px-4 sm:px-6 rounded-2xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-2 text-sm sm:text-base ${
                 (currentStep === 2 && !selectedPlan) || loading
                   ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-violet-600 to-purple-600 text-white hover:from-violet-700 hover:to-purple-700'
+                  : 'bg-csv-gradient text-white hover:bg-csv-orange-600'
               }`}
             >
               {loading ? (
