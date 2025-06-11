@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import { X, FileText, Zap, Crown, ArrowRight, Sparkles, Check, ExternalLink, User, Mail, AlertCircle } from 'lucide-react';
+import { X, FileText, Zap, Crown, ArrowRight, Sparkles, Check, ExternalLink, AlertCircle } from 'lucide-react';
 import { useStripe } from '../hooks/useStripe';
 import { STRIPE_PRODUCTS } from '../lib/stripe';
 
 interface OnboardingModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onComplete: (kycData?: { firstName: string; lastName: string; email: string }) => void;
-  onPlanSelect?: (plan: 'free' | 'pro') => void;
+  onComplete: () => void;
   userEmail?: string;
   userName?: string;
 }
@@ -16,19 +15,14 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
   isOpen, 
   onClose, 
   onComplete,
-  onPlanSelect,
   userEmail,
   userName
 }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [selectedPlan, setSelectedPlan] = useState<'free' | 'pro' | null>(null);
-  const [kycData, setKycData] = useState({
-    firstName: '',
-    lastName: '',
-    email: userEmail || ''
-  });
-  const [kycErrors, setKycErrors] = useState<Record<string, string>>({});
-  const { createCheckoutSession, loading } = useStripe();
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const { createCheckoutSession, loading: stripeLoading } = useStripe();
 
   if (!isOpen) return null;
 
@@ -50,80 +44,46 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
       description: "Start free or upgrade for unlimited downloads",
       icon: <Crown className="w-12 h-12 text-white" />,
       gradient: "bg-csv-gradient"
-    },
-    {
-      title: "Complete Your Profile",
-      description: "Quick verification to secure your account",
-      icon: <User className="w-12 h-12 text-white" />,
-      gradient: "bg-csv-gradient"
     }
   ];
 
-  const validateKYC = (): boolean => {
-    const errors: Record<string, string> = {};
+  const handleNext = async () => {
+    // Clear any previous errors
+    setCheckoutError(null);
+    setLoading(true);
     
-    if (!kycData.firstName.trim()) {
-      errors.firstName = 'First name is required';
-    } else if (kycData.firstName.trim().length < 2) {
-      errors.firstName = 'First name must be at least 2 characters';
+    try {
+      if (currentStep === 2) {
+        if (selectedPlan === 'pro') {
+          try {
+            await createCheckoutSession('pro', userEmail || '', userName || '');
+            return; // Redirect happens in createCheckoutSession
+          } catch (error: any) {
+            console.error('Checkout error:', error);
+            setCheckoutError(error.message || 'Failed to create checkout session. Please try again.');
+            return;
+          }
+        }
+        // For free plan, complete onboarding
+        onComplete();
+        onClose();
+      } else {
+        // For other steps, just go to next step
+        setCurrentStep(currentStep + 1);
+      }
+    } catch (error: any) {
+      console.error('Error in handleNext:', error);
+    } finally {
+      setLoading(false);
     }
-    
-    if (!kycData.lastName.trim()) {
-      errors.lastName = 'Last name is required';
-    } else if (kycData.lastName.trim().length < 2) {
-      errors.lastName = 'Last name must be at least 2 characters';
-    }
-    
-    if (!kycData.email.trim()) {
-      errors.email = 'Email is required';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(kycData.email)) {
-      errors.email = 'Please enter a valid email address';
-    }
-    
-    setKycErrors(errors);
-    return Object.keys(errors).length === 0;
   };
 
-  const handleNext = async () => {
-    if (currentStep === 2) {
-      // Plan selection step
-      if (!selectedPlan) return;
-      
-      if (selectedPlan === 'pro') {
-        try {
-          // Ensure we're using the correct product ID from STRIPE_PRODUCTS
-          await createCheckoutSession('pro', userEmail, userName);
-          // User will be redirected to Stripe
-          return;
-        } catch (error) {
-          console.error('Failed to create checkout session:', error);
-          // Fall back to free plan
-          setSelectedPlan('free');
-        }
-      }
-      
-      // Continue to KYC step
-      setCurrentStep(currentStep + 1);
-    } else if (currentStep === 3) {
-      // KYC step - validate and complete
-      if (!validateKYC()) return;
-      
-      onComplete({
-        firstName: kycData.firstName.trim(),
-        lastName: kycData.lastName.trim(),
-        email: kycData.email.trim()
-      });
-      onClose();
-    } else if (currentStep < steps.length - 1) {
-      setCurrentStep(currentStep + 1);
-    }
-  };
 
   const handleSkip = () => {
     if (currentStep === 2) {
       // Skip plan selection, default to free
       setSelectedPlan('free');
-      setCurrentStep(currentStep + 1);
+      onComplete();
     } else {
       onComplete();
       onClose();
@@ -132,6 +92,8 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
 
   const handlePlanSelect = (plan: 'free' | 'pro') => {
     setSelectedPlan(plan);
+    // Reset checkout error when plan changes
+    setCheckoutError(null);
   };
 
   const formatPrice = (cents: number) => {
@@ -318,80 +280,46 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
                   </div>
                 </div>
               )}
-            </div>
-          )}
-
-          {/* KYC Form */}
-          {currentStep === 3 && (
-            <div className="space-y-4 mb-6 text-left">
-              <div className="p-4 bg-csv-orange-50/80 rounded-2xl border border-csv-orange-200/50 mb-6">
-                <div className="flex items-center gap-3">
-                  <AlertCircle className="w-5 h-5 text-csv-orange-600" />
-                  <div>
-                    <p className="text-sm font-semibold text-csv-orange-800">Quick Verification Required</p>
-                    <p className="text-xs text-csv-orange-600">We need this information to secure your account and enable file processing</p>
+              
+              {/* Display checkout errors */}
+              {checkoutError && (
+                <div className="mt-4 p-4 border border-red-300 bg-red-50 rounded-lg">
+                  <div className="flex items-start">
+                    <AlertCircle className="h-5 w-5 text-red-500 mr-2 mt-0.5" />
+                    <div>
+                      <h4 className="font-medium text-red-800">Payment Error</h4>
+                      <p className="text-red-700">{checkoutError}</p>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        <button 
+                          onClick={() => {
+                            setCheckoutError(null);
+                            handleNext();
+                          }} 
+                          disabled={stripeLoading}
+                          className={`px-3 py-1 bg-red-100 hover:bg-red-200 text-red-800 rounded-md text-sm transition-colors ${stripeLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        >
+                          {stripeLoading ? 'Processing...' : 'Try Again'}
+                        </button>
+                        <button 
+                          onClick={() => {
+                            setCheckoutError(null);
+                            handlePlanSelect('free');
+                            setCurrentStep(currentStep + 1);
+                          }} 
+                          disabled={stripeLoading}
+                          className={`px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-md text-sm transition-colors ${stripeLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        >
+                          Use Free Plan Instead
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    First Name *
-                  </label>
-                  <input
-                    type="text"
-                    value={kycData.firstName}
-                    onChange={(e) => setKycData(prev => ({ ...prev, firstName: e.target.value }))}
-                    className={`w-full px-3 py-2 bg-white/80 border rounded-xl focus:ring-2 focus:ring-csv-orange-500 transition-all duration-300 ${
-                      kycErrors.firstName ? 'border-red-300 focus:border-red-500' : 'border-gray-300 focus:border-csv-orange-500'
-                    }`}
-                    placeholder="John"
-                  />
-                  {kycErrors.firstName && (
-                    <p className="mt-1 text-xs text-red-600">{kycErrors.firstName}</p>
-                  )}
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Last Name *
-                  </label>
-                  <input
-                    type="text"
-                    value={kycData.lastName}
-                    onChange={(e) => setKycData(prev => ({ ...prev, lastName: e.target.value }))}
-                    className={`w-full px-3 py-2 bg-white/80 border rounded-xl focus:ring-2 focus:ring-csv-orange-500 transition-all duration-300 ${
-                      kycErrors.lastName ? 'border-red-300 focus:border-red-500' : 'border-gray-300 focus:border-csv-orange-500'
-                    }`}
-                    placeholder="Doe"
-                  />
-                  {kycErrors.lastName && (
-                    <p className="mt-1 text-xs text-red-600">{kycErrors.lastName}</p>
-                  )}
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  <Mail className="w-4 h-4 inline mr-1" />
-                  Email Address *
-                </label>
-                <input
-                  type="email"
-                  value={kycData.email}
-                  onChange={(e) => setKycData(prev => ({ ...prev, email: e.target.value }))}
-                  className={`w-full px-3 py-2 bg-white/80 border rounded-xl focus:ring-2 focus:ring-csv-orange-500 transition-all duration-300 ${
-                    kycErrors.email ? 'border-red-300 focus:border-red-500' : 'border-gray-300 focus:border-csv-orange-500'
-                  }`}
-                  placeholder="john.doe@example.com"
-                />
-                {kycErrors.email && (
-                  <p className="mt-1 text-xs text-red-600">{kycErrors.email}</p>
-                )}
-              </div>
+              )}
             </div>
           )}
+
+
 
           {/* Buttons */}
           <div className="flex gap-3">
@@ -403,9 +331,9 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
             </button>
             <button
               onClick={handleNext}
-              disabled={(currentStep === 2 && !selectedPlan) || loading}
+              disabled={(currentStep === 2 && !selectedPlan) || loading || stripeLoading}
               className={`flex-1 py-2 sm:py-3 px-4 sm:px-6 rounded-2xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-2 text-sm sm:text-base ${
-                (currentStep === 2 && !selectedPlan) || loading
+                (currentStep === 2 && !selectedPlan) || loading || stripeLoading
                   ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                   : 'bg-csv-gradient text-white hover:bg-csv-orange-600'
               }`}

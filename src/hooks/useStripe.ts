@@ -43,11 +43,23 @@ export const useStripe = () => {
       });
 
       if (functionError) {
-        throw new Error(functionError.message || 'Failed to create checkout session');
+        // Provide more detailed error message based on the error
+        let errorMessage = functionError.message || 'Failed to create checkout session';
+        
+        // Check for specific error patterns
+        if (errorMessage.includes('subscription')) {
+          errorMessage = 'There was an issue with your subscription. Please try again or contact support.';
+        } else if (errorMessage.includes('customer')) {
+          errorMessage = 'There was an issue with your customer profile. Please complete your profile information first.';
+        } else if (errorMessage.includes('stripe')) {
+          errorMessage = 'Our payment processor is currently experiencing issues. Please try again later.';
+        }
+        
+        throw new Error(errorMessage);
       }
 
       if (!data?.sessionId) {
-        throw new Error('No session ID returned from checkout creation');
+        throw new Error('No session ID returned from checkout creation. Please try again.');
       }
 
       // Redirect to Stripe Checkout
@@ -56,11 +68,23 @@ export const useStripe = () => {
       });
 
       if (stripeError) {
-        throw new Error(stripeError.message || 'Failed to redirect to checkout');
+        throw new Error(stripeError.message || 'Failed to redirect to checkout. Please try again.');
       }
 
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred';
+      let errorMessage = 'An unexpected error occurred';
+      
+      if (err instanceof Error) {
+        errorMessage = err.message;
+        
+        // Provide more user-friendly error messages
+        if (errorMessage.includes('Failed to create subscription record')) {
+          errorMessage = 'We couldn\'t create your subscription. Please try again or contact support.';
+        } else if (errorMessage.includes('Failed to update subscription record')) {
+          errorMessage = 'We couldn\'t update your subscription. Please try again or contact support.';
+        }
+      }
+      
       setError(errorMessage);
       console.error('Stripe checkout error:', err);
       throw err;

@@ -73,9 +73,9 @@ Deno.serve(async (req: Request) => {
     // Check if user already has a Stripe customer ID
     const { data: subscription } = await supabaseClient
       .from('subscriptions')
-      .select('stripe_customer_id')
+      .select('stripe_customer_id, id')
       .eq('user_id', user.id)
-      .single();
+      .maybeSingle(); // Use maybeSingle instead of single to handle case where no record exists
 
     if (subscription?.stripe_customer_id) {
       // Retrieve existing customer
@@ -90,25 +90,50 @@ Deno.serve(async (req: Request) => {
         },
       });
 
-      // Update existing subscription with customer ID (don't upsert to avoid foreign key violation)
-      const { error: updateError } = await supabaseClient
-        .from('subscriptions')
-        .update({
-          stripe_customer_id: customer.id,
-        })
-        .eq('user_id', user.id);
+      // Create or update subscription record with customer ID
+      if (subscription) {
+        // Update existing subscription
+        const { error: updateError } = await supabaseClient
+          .from('subscriptions')
+          .update({
+            stripe_customer_id: customer.id,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', subscription.id);
 
-      if (updateError) {
-        console.error('Error updating subscription with customer ID:', updateError);
-        // If update fails, the subscription might not exist yet
-        // This should not happen if user profile creation flow is working correctly
-        return new Response(
-          JSON.stringify({ error: 'User subscription not found. Please complete profile setup first.' }),
-          {
-            status: 400,
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-          }
-        );
+        if (updateError) {
+          console.error('Error updating subscription with customer ID:', updateError);
+          return new Response(
+            JSON.stringify({ error: 'Failed to update subscription record.' }),
+            {
+              status: 500,
+              headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+            }
+          );
+        }
+      } else {
+        // Create new subscription record
+        const { error: insertError } = await supabaseClient
+          .from('subscriptions')
+          .insert({
+            user_id: user.id,
+            stripe_customer_id: customer.id,
+            status: 'incomplete',
+            product_type: requestData.productType,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          });
+
+        if (insertError) {
+          console.error('Error creating subscription record:', insertError);
+          return new Response(
+            JSON.stringify({ error: 'Failed to create subscription record.' }),
+            {
+              status: 500,
+              headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+            }
+          );
+        }
       }
     }
 
