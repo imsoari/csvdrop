@@ -201,5 +201,6 @@ const MacAuthModal: React.FC<MacAuthModalProps> = ({
       </div>
     </div>
   );
+};
 
 export default MacAuthModal;
