@@ -15,6 +15,13 @@ interface WindowPosition {
   zIndex: number;
 }
 
+interface DesktopIconPosition {
+  id: string;
+  top: number;
+  left: number;
+  zIndex: number;
+}
+
 const MacLandingPage: React.FC<MacLandingPageProps> = ({ onShowAuth, onShowPayment }) => {
   const [stepsCompleted, setStepsCompleted] = useState([false, false, false]);
   
@@ -123,45 +130,140 @@ const MacLandingPage: React.FC<MacLandingPageProps> = ({ onShowAuth, onShowPayme
     document.removeEventListener('mouseup', handleMouseUp);
   };
   
-  // Clean up event listeners
   useEffect(() => {
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+    
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
   }, []);
+
+  const [desktopIconPositions, setDesktopIconPositions] = useState<DesktopIconPosition[]>([
+    { id: 'upload', top: 30, left: 30, zIndex: 5 },
+    { id: 'aboutUs', top: 120, left: 30, zIndex: 5 },
+    { id: 'socials', top: 210, left: 30, zIndex: 5 },
+    { id: 'freeTrial', top: 300, left: 30, zIndex: 5 }
+  ]);
+
+  const handleIconMouseDown = (e: React.MouseEvent, iconId: string) => {
+    e.stopPropagation();
+    const iconPos = desktopIconPositions.find(pos => pos.id === iconId);
+    if (!iconPos) return;
+
+    // Update z-index to bring this icon to the front
+    setDesktopIconPositions(prevPositions => {
+      const newMaxZ = Math.max(...prevPositions.map(p => p.zIndex)) + 1;
+      return prevPositions.map(pos => 
+        pos.id === iconId ? {...pos, zIndex: newMaxZ} : pos
+      );
+    });
+
+    // Set up dragging reference
+    dragRef.current = {
+      isDragging: true,
+      windowId: null,
+      initialX: e.clientX,
+      initialY: e.clientY,
+      initialTop: iconPos.top,
+      initialLeft: iconPos.left
+    };
+
+    // Add event listeners for icon dragging
+    document.addEventListener('mousemove', handleIconMouseMove);
+    document.addEventListener('mouseup', handleIconMouseUp);
+  };
+
+  const handleIconMouseMove = (e: MouseEvent) => {
+    const { isDragging, initialX, initialY, initialTop, initialLeft } = dragRef.current;
+
+    if (isDragging && dragRef.current.windowId === null) {
+      const deltaX = e.clientX - initialX;
+      const deltaY = e.clientY - initialY;
+      
+      // Calculate new position
+      const newTop = initialTop + deltaY;
+      const newLeft = initialLeft + deltaX;
+
+      // Update the desktop icon position
+      setDesktopIconPositions(prev =>
+        prev.map(pos =>
+          pos.top === initialTop && pos.left === initialLeft
+            ? { ...pos, top: newTop, left: newLeft }
+            : pos
+        )
+      );
+    }
+  };
+
+  const handleIconMouseUp = () => {
+    if (dragRef.current.isDragging && dragRef.current.windowId === null) {
+      dragRef.current.isDragging = false;
+
+      // Remove event listeners
+      document.removeEventListener('mousemove', handleIconMouseMove);
+      document.removeEventListener('mouseup', handleIconMouseUp);
+    }
+  };
   
   return (
     <div className="mac-desktop">
-      {/* Desktop Icons */}
-      <div className="mac-desktop-icons">
-        <div className="mac-desktop-icon" onClick={() => openWindow('upload')}>
-          <div className="mac-desktop-icon-img">
-            <span role="img" aria-label="upload">💾</span>
+      {/* Desktop Icons - Now draggable */}
+      <div>
+        {desktopIconPositions.map((iconPos) => (
+          <div 
+            key={iconPos.id}
+            className="mac-desktop-icon" 
+            style={{
+              position: 'absolute',
+              top: iconPos.top,
+              left: iconPos.left,
+              zIndex: iconPos.zIndex
+            }}
+            onMouseDown={(e) => handleIconMouseDown(e, iconPos.id)}
+            onClick={() => {
+              playMacSound('CLICK');
+              openWindow(iconPos.id);
+            }}
+          >
+            {iconPos.id === 'upload' && (
+              <>
+                <div className="mac-desktop-icon-img">
+                  <span role="img" aria-label="upload">💾</span>
+                </div>
+                <span className="mac-desktop-icon-label">Upload CSV</span>
+              </>
+            )}
+            
+            {iconPos.id === 'aboutUs' && (
+              <>
+                <div className="mac-desktop-icon-img">
+                  <span role="img" aria-label="aboutUs">👥</span>
+                </div>
+                <span className="mac-desktop-icon-label">About Us</span>
+              </>
+            )}
+            
+            {iconPos.id === 'socials' && (
+              <>
+                <div className="mac-desktop-icon-img">
+                  <span role="img" aria-label="socials">📱</span>
+                </div>
+                <span className="mac-desktop-icon-label">Socials</span>
+              </>
+            )}
+            
+            {iconPos.id === 'freeTrial' && (
+              <>
+                <div className="mac-desktop-icon-img">
+                  <span role="img" aria-label="freeTrial">🎁</span>
+                </div>
+                <span className="mac-desktop-icon-label">Free Trial</span>
+              </>
+            )}
           </div>
-          <span className="mac-desktop-icon-label">Upload CSV</span>
-        </div>
-        
-        <div className="mac-desktop-icon" onClick={() => openWindow('features')}>
-          <div className="mac-desktop-icon-img">
-            <span role="img" aria-label="features">⚙️</span>
-          </div>
-          <span className="mac-desktop-icon-label">Features</span>
-        </div>
-        
-        <div className="mac-desktop-icon" onClick={() => openWindow('pricing')}>
-          <div className="mac-desktop-icon-img">
-            <span role="img" aria-label="pricing">💰</span>
-          </div>
-          <span className="mac-desktop-icon-label">Pricing</span>
-        </div>
-        
-        <div className="mac-desktop-icon" onClick={onShowAuth}>
-          <div className="mac-desktop-icon-img">
-            <span role="img" aria-label="signup">👤</span>
-          </div>
-          <span className="mac-desktop-icon-label">Sign Up</span>
-        </div>
+        ))}
       </div>
       
       {/* Desktop Windows - shown when clicking icons */}
@@ -373,7 +475,10 @@ const MacLandingPage: React.FC<MacLandingPageProps> = ({ onShowAuth, onShowPayme
             
             <button 
               className="retro-gradient-btn px-8 py-2 mx-auto"
-              onClick={() => closeWindow('welcome')}
+              onClick={() => {
+                playMacSound('CLICK');
+                closeWindow('welcome');
+              }}
             >
               [ Start Exploring ]
             </button>
