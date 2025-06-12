@@ -480,7 +480,7 @@ const MacLandingPage: React.FC<MacLandingPageProps> = ({ onShowAuth, onShowPayme
                 closeWindow('welcome');
               }}
             >
-              [ Start Exploring ]
+              [ Drop that csv like its hot ]
             </button>
           </div>
         </div>

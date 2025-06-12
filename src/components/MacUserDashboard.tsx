@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useProfile } from '../hooks/useProfile';
 import { useSubscription } from '../hooks/useSubscription';
+import useMacSounds from '../hooks/useMacSounds';
 import '../styles/macintosh.css';
+import '../styles/mac-dashboard.css';
 
 interface MacUserDashboardProps {
   onShowPayment: () => void;
@@ -10,12 +12,23 @@ interface MacUserDashboardProps {
 }
 
 const MacUserDashboard: React.FC<MacUserDashboardProps> = ({ onShowPayment, onShowDownloadTicket }) => {
-  const { user, signOut } = useAuth();
+  const { user, logout } = useAuth();
   const { profile } = useProfile();
   const { subscription } = useSubscription();
+  const macSounds = useMacSounds();
   
+  // State variables
   const [fileUploading, setFileUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [currentTime, setCurrentTime] = useState(new Date());
+  
+  // Update clock
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
   
   // Handle file selection
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,120 +63,173 @@ const MacUserDashboard: React.FC<MacUserDashboardProps> = ({ onShowPayment, onSh
   
   // Handle sign out
   const handleSignOut = () => {
-    signOut();
+    macSounds.playClick();
+    logout();
   };
   
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* Header */}
-      <header className="mac-window-title w-full py-2 flex justify-between items-center px-4">
-        <h1 className="text-white">CSV DROP</h1>
-        <div className="flex items-center space-x-4">
-          <span className="text-white text-sm">
-            {profile?.first_name || user?.email}
-          </span>
+    <div className="mac-os-desktop">
+      {/* Mac OS Menu Bar */}
+      <div className="mac-os-menubar">
+        <div className="mac-apple-menu">
+          <span className="mac-apple-logo"></span>
+        </div>
+        <div className="mac-menu-item">File</div>
+        <div className="mac-menu-item">Edit</div>
+        <div className="mac-menu-item">View</div>
+        <div className="mac-menu-item">Special</div>
+        <div className="mac-menu-item">Help</div>
+        <div className="flex-grow"></div>
+        <div className="flex items-center">
+          {currentTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+        </div>
+      </div>
+      
+      <div className="mac-dashboard-container">
+        <div className="mac-desktop-container">
+          {/* Account Window */}
+          <div className="mac-classic-window mb-6">
+            <div className="mac-window-header">
+              <div className="mac-window-controls">
+                <div className="mac-close-box"></div>
+              </div>
+              <div className="mac-window-title-text">Account Information</div>
+            </div>
+            <div className="p-5 mac-classic-scrollbar">
+              <div className="flex flex-col md:flex-row justify-between items-center">
+                <div>
+                  <div className="mb-4">
+                    <div className="flex items-center mb-2">
+                      <div className="mac-icon mac-icon-computer mr-2"></div>
+                      <p className="font-bold">{profile?.first_name || 'User'}'s Workstation</p>
+                    </div>
+                    <p><span className="font-bold">Email:</span> {user?.email}</p>
+                    <p><span className="font-bold">Name:</span> {profile?.first_name} {profile?.last_name}</p>
+                    <p><span className="font-bold">Plan:</span> {subscription?.type || 'Free'}</p>
+                  </div>
+                </div>
+                
+                <button 
+                  className="mac-button"
+                  onClick={() => {
+                    macSounds.playClick();
+                    onShowPayment();
+                  }}
+                >
+                  Upgrade Account
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          {/* File Upload Window */}
+          <div className="mac-classic-window mb-6">
+            <div className="mac-window-header">
+              <div className="mac-window-controls">
+                <div className="mac-close-box"></div>
+              </div>
+              <div className="mac-window-title-text">Upload CSV File</div>
+            </div>
+            <div className="p-5 mac-classic-scrollbar">
+              <div className="flex flex-col items-center">
+                <div className="mac-file-drop-area mb-4 w-full">
+                  <div className="mac-floppy-icon"></div>
+                  <p className="mb-2 font-bold">Drop your CSV file here</p>
+                  <p className="text-sm">or click to browse files</p>
+                  <input 
+                    type="file" 
+                    accept=".csv" 
+                    className="mac-file-input"
+                    onChange={handleFileChange}
+                    disabled={fileUploading}
+                  />
+                </div>
+                
+                {selectedFile && (
+                  <div className="mb-4 mac-classic-window p-2 w-full">
+                    <div className="flex items-center">
+                      <div className="mac-icon mac-icon-csv mr-2"></div>
+                      <p>Selected: {selectedFile.name}</p>
+                    </div>
+                  </div>
+                )}
+                
+                {fileUploading ? (
+                  <div className="w-full mb-4">
+                    <p className="mb-2 text-center">Uploading file...</p>
+                    <div className="mac-progress-bar">
+                      <div className="mac-progress-fill" style={{width: '70%'}}></div>
+                    </div>
+                  </div>
+                ) : (
+                  <button 
+                    className="mac-button"
+                    onClick={() => {
+                      macSounds.playDisk();
+                      handleFileUpload();
+                    }}
+                    disabled={!selectedFile}
+                  >
+                    Process CSV File
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+          
+          {/* Recent Activity Window */}
+          <div className="mac-classic-window">
+            <div className="mac-window-header">
+              <div className="mac-window-controls">
+                <div className="mac-close-box"></div>
+              </div>
+              <div className="mac-window-title-text">Recent Activity</div>
+            </div>
+            <div className="p-5 mac-classic-scrollbar">
+              <div className="mac-ai-assistant p-4 mb-4">
+                <div className="flex items-center mb-2">
+                  <div className="mac-icon mac-icon-ai w-8 h-8 mr-2"></div>
+                  <h3 className="font-bold">AI Assistant</h3>
+                </div>
+                <p className="mac-ai-text">
+                  Welcome to CSV DROP! Upload a CSV file to get started with processing and analysis.
+                </p>
+              </div>
+              
+              <table className="mac-list-view w-full">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>File Name</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td colSpan={3} className="text-center py-6">No recent activity to display</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Mac Status Bar */}
+      <div className="mac-status-bar">
+        <div className="mac-status-item">
+          <div className="mac-icon mac-icon-floppy mr-1" style={{width: '16px', height: '16px'}}></div>
+          <span>{subscription?.type || 'Free'} Plan</span>
+        </div>
+        <div className="mac-status-item">
           <button 
-            className="text-white text-sm hover:underline"
+            className="text-xs hover:underline"
             onClick={handleSignOut}
           >
             Sign Out
           </button>
         </div>
-      </header>
-      
-      {/* Main Content */}
-      <main className="flex-grow flex flex-col items-center p-4">
-        {/* User Info */}
-        <div className="mac-window max-w-4xl w-full mb-6">
-          <div className="mac-window-title">
-            Account Information
-          </div>
-          <div className="mac-window-content p-4">
-            <div className="flex flex-col md:flex-row justify-between items-center">
-              <div>
-                <p><strong>Email:</strong> {user?.email}</p>
-                <p><strong>Name:</strong> {profile?.first_name} {profile?.last_name}</p>
-                <p><strong>Plan:</strong> {subscription?.type || 'Free'}</p>
-              </div>
-              
-              <button 
-                className="mac-button mt-4 md:mt-0"
-                onClick={onShowPayment}
-              >
-                Upgrade Account
-              </button>
-            </div>
-          </div>
-        </div>
-        
-        {/* File Upload */}
-        <div className="mac-window max-w-4xl w-full mb-6">
-          <div className="mac-window-title">
-            Upload CSV File
-          </div>
-          <div className="mac-window-content p-6">
-            <div className="flex flex-col items-center">
-              <div className="mac-icon mac-icon-csv w-16 h-16 mb-4"></div>
-              
-              <label className="mac-button mb-4 cursor-pointer">
-                <input 
-                  type="file" 
-                  accept=".csv" 
-                  className="hidden"
-                  onChange={handleFileChange}
-                  disabled={fileUploading}
-                />
-                Select CSV File
-              </label>
-              
-              {selectedFile && (
-                <div className="mb-4">
-                  <p className="text-center">Selected: {selectedFile.name}</p>
-                </div>
-              )}
-              
-              <button 
-                className="mac-button"
-                onClick={handleFileUpload}
-                disabled={!selectedFile || fileUploading}
-              >
-                {fileUploading ? (
-                  <span>Uploading...</span>
-                ) : (
-                  <span>Upload File</span>
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
-        
-        {/* Recent Activity */}
-        <div className="mac-window max-w-4xl w-full">
-          <div className="mac-window-title">
-            Recent Activity
-          </div>
-          <div className="mac-window-content p-4">
-            <div className="mac-ai-assistant p-4 mb-4">
-              <div className="flex items-center mb-2">
-                <div className="mac-icon mac-icon-ai w-8 h-8 mr-2"></div>
-                <h3 className="font-bold">AI Assistant</h3>
-              </div>
-              <p className="mac-ai-text">
-                Welcome to CSV DROP! Upload a CSV file to get started with processing and analysis.
-              </p>
-            </div>
-            
-            <p className="text-center text-sm">No recent activity to display.</p>
-          </div>
-        </div>
-      </main>
-      
-      {/* Footer */}
-      <footer className="mac-window-title w-full py-2 mt-auto">
-        <div className="text-center text-white text-sm">
-          &copy; {new Date().getFullYear()} CSV DROP. All rights reserved.
-        </div>
-      </footer>
+      </div>
     </div>
   );
 };
