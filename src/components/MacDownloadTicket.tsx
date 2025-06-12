@@ -4,8 +4,11 @@ import '../styles/macintosh.css';
 interface MacDownloadTicketProps {
   isOpen: boolean;
   onClose: () => void;
-  downloadType: string;
+  downloadType: "free" | "pro" | "single";
   ticketNumber: string;
+  fileName: string;
+  rowCount: number;
+  columnCount: number;
   playClick?: () => void;
   playDisk?: () => void;
 }

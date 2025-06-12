@@ -1,0 +1,276 @@
+/**
+ * Mobile Responsiveness CSS
+ * Adapts the 90s Mac interface for modern mobile devices
+ */
+
+/* Global responsive adjustments */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Viewport height fix for mobile */
+:root {
+  --vh: 1vh;
+}
+
+/* General Mobile Adjustments */
+@media (max-width: 768px) {
+  /* Base mobile styles */
+  body, html {
+    overflow-x: hidden;
+    touch-action: manipulation;
+    min-height: -webkit-fill-available;
+    -webkit-text-size-adjust: none;
+  }
+
+  /* Adjust font sizes for better readability */
+  body {
+    font-size: 16px;
+  }
+  
+  h1 {
+    font-size: 1.8rem;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+  }
+  
+  h3 {
+    font-size: 1.2rem;
+  }
+  
+  /* Button sizes for touch targets */
+  button, .mac-button, .retro-gradient-btn {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 10px 16px;
+    touch-action: manipulation;
+  }
+  
+  /* Form controls for touch */
+  input, select, textarea {
+    font-size: 16px; /* Prevents iOS zoom on focus */
+    padding: 10px;
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  /* Mac Desktop and Windows */
+  .mac-os-desktop {
+    padding-top: 10px;
+    height: calc(var(--vh, 1vh) * 100);
+    overflow-y: auto;
+  }
+  
+  .mac-os-menubar {
+    height: auto;
+    min-height: 26px;
+    padding: 6px 8px;
+    flex-wrap: wrap;
+  }
+  
+  .mac-menu-item {
+    padding: 5px;
+    margin: 2px 5px;
+    font-size: 14px;
+  }
+  
+  /* Windows adjustments */
+  .mac-popup-window, .mac-desktop-window, .mac-window {
+    width: 92vw !important;
+    max-width: 92vw !important;
+    left: 4vw !important;
+    top: 40px !important;
+    height: auto;
+    max-height: 80vh;
+    overflow: auto;
+    position: fixed !important;
+  }
+  
+  .mac-window-maximized {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    left: 0 !important;
+    top: 0 !important;
+    height: calc(var(--vh, 1vh) * 100);
+    max-height: calc(var(--vh, 1vh) * 100);
+    border-radius: 0;
+  }
+  
+  .mac-window-header {
+    height: 26px;
+    padding: 0 6px;
+  }
+  
+  .mac-window-content {
+    max-height: 70vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 10px;
+  }
+  
+  /* Desktop Icons */
+  .mac-desktop-icons-column {
+    position: relative !important;
+    top: unset !important;
+    left: unset !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    width: 100% !important;
+    padding: 15px 10px !important;
+    margin: 10px auto !important;
+    gap: 20px;
+    z-index: 1;
+  }
+  
+  .mac-desktop-icon {
+    margin: 10px !important;
+    padding: 8px !important;
+    min-width: 70px !important;
+  }
+  
+  /* Dashboard Layout */
+  .mac-dashboard-grid {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .mac-dashboard-section {
+    width: 100% !important;
+    margin-bottom: 15px;
+  }
+  
+  /* Recent Activity */
+  .mac-activity-list {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  
+  /* Tables */
+  .mac-table {
+    width: 100%;
+    overflow-x: auto;
+    display: block;
+    white-space: nowrap;
+  }
+  
+  .mac-table th, .mac-table td {
+    padding: 8px 6px;
+  }
+  
+  /* Form layout */
+  .mac-form {
+    width: 100%;
+  }
+  
+  .mac-form input, 
+  .mac-form select,
+  .mac-form textarea,
+  .mac-input {
+    width: 100%;
+  }
+  
+  /* File upload area */
+  .mac-file-upload-area {
+    min-height: 100px;
+    padding: 15px;
+  }
+  
+  /* Fix overflow issues */
+  .flex {
+    flex-wrap: wrap;
+  }
+  
+  .mac-classic-box {
+    width: 100% !important;
+  }
+  
+  /* Modal sizing */
+  .mac-modal-container {
+    width: 94% !important;
+    max-width: 94% !important;
+    max-height: 80vh;
+    margin: 10vh auto;
+  }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+  .mac-popup-window,
+  .mac-desktop-window,
+  .mac-window {
+    width: 96vw !important;
+    max-width: 96vw !important;
+    left: 2vw !important;
+  }
+  
+  /* Stack buttons vertically */
+  .flex.space-x-3 {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .flex.space-x-3 > * {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  
+  .mac-button, .retro-gradient-btn {
+    width: 100%;
+  }
+  
+  /* Hide some menu items */
+  .mac-menu-item.optional {
+    display: none;
+  }
+  
+  /* Status bar adjustments */
+  .mac-status-bar {
+    flex-direction: column;
+    padding: 5px;
+    height: auto;
+  }
+  
+  /* Smaller icons */
+  .mac-icon {
+    transform: scale(0.9);
+  }
+}
+
+/* Add JavaScript to update viewport height CSS variable */
+@media (max-width: 768px) {
+  /* This will be handled by a script that needs to be added */
+  /* See script below in comments */
+}
+
+/* 
+Add this script to your main JavaScript file or index.html:
+
+document.addEventListener('DOMContentLoaded', () => {
+  // First we get the viewport height and we multiply it by 1% to get a value for a vh unit
+  let vh = window.innerHeight * 0.01;
+  // Then we set the value in the --vh custom property to the root of the document
+  document.documentElement.style.setProperty('--vh', `${vh}px`);
+
+  // We listen to the resize event
+  window.addEventListener('resize', () => {
+    // We execute the same script as before
+    let vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  });
+});
+*/

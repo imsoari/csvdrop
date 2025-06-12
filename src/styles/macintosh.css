@@ -34,6 +34,8 @@
   background-color: #f3f3f3; /* Light Gray */
   color: #000000; /* Black */
   image-rendering: pixelated;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 /* Mac Window */
@@ -50,6 +52,7 @@
 .retro-gradient-text {
   background: linear-gradient(to right, #66FF99, #00FF9F);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: bold;
 }

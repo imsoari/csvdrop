@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import useMacSounds from '../hooks/useMacSounds';
 import { Link } from 'react-router-dom';
 import '../styles/macintosh.css';
 
@@ -23,6 +24,9 @@ interface DesktopIconPosition {
 }
 
 const MacLandingPage: React.FC<MacLandingPageProps> = ({ onShowAuth, onShowPayment }) => {
+  // Initialize Mac sounds
+  const { playClick, playError, playSuccess, enabled: soundEnabled } = useMacSounds(true);
+  
   const [stepsCompleted, setStepsCompleted] = useState([false, false, false]);
   
   // Toggle step completion for demo purposes
@@ -34,13 +38,70 @@ const MacLandingPage: React.FC<MacLandingPageProps> = ({ onShowAuth, onShowPayme
 
   // Window state management
   const [activeWindows, setActiveWindows] = useState<string[]>(['welcome']);
-  const [windowPositions, setWindowPositions] = useState<WindowPosition[]>([
-    { id: 'welcome', top: window.innerHeight / 2 - 150, left: window.innerWidth / 2 - 225, width: 450, zIndex: 10 },
-    { id: 'help', top: 80, left: 100, width: 500, zIndex: 5 },
-    { id: 'features', top: 100, left: 150, width: 700, zIndex: 5 },
-    { id: 'pricing', top: 120, left: 200, width: 600, zIndex: 5 },
-    { id: 'upload', top: 90, left: 120, width: 550, zIndex: 5 }
-  ]);
+  const [windowPositions, setWindowPositions] = useState<WindowPosition[]>([]);
+  
+  // Initialize window positions based on screen size
+  useEffect(() => {
+    const isMobile = window.innerWidth <= 768;
+    
+    setWindowPositions([
+      { 
+        id: 'welcome', 
+        top: isMobile ? 60 : 100, 
+        left: isMobile ? window.innerWidth * 0.04 : 100, 
+        width: isMobile ? window.innerWidth * 0.92 : 500, 
+        zIndex: 10 
+      },
+      { 
+        id: 'help', 
+        top: isMobile ? 70 : 120, 
+        left: isMobile ? window.innerWidth * 0.04 : 200, 
+        width: isMobile ? window.innerWidth * 0.92 : 500, 
+        zIndex: 5 
+      },
+      { 
+        id: 'features', 
+        top: isMobile ? 80 : 140, 
+        left: isMobile ? window.innerWidth * 0.04 : 300, 
+        width: isMobile ? window.innerWidth * 0.92 : 700, 
+        zIndex: 5 
+      },
+      { 
+        id: 'pricing', 
+        top: isMobile ? 90 : 160, 
+        left: isMobile ? window.innerWidth * 0.04 : 400, 
+        width: isMobile ? window.innerWidth * 0.92 : 600, 
+        zIndex: 5 
+      },
+      { 
+        id: 'upload', 
+        top: isMobile ? 100 : 180, 
+        left: isMobile ? window.innerWidth * 0.04 : 500, 
+        width: isMobile ? window.innerWidth * 0.92 : 550, 
+        zIndex: 5 
+      }
+    ]);
+    
+    // Update window positions on resize
+    const handleResize = () => {
+      const isMobile = window.innerWidth <= 768;
+      
+      setWindowPositions((prev: WindowPosition[]) => prev.map((win: WindowPosition) => ({
+        ...win,
+        top: isMobile ? Math.min(win.top, 90) : win.top,
+        left: isMobile ? window.innerWidth * 0.04 : win.left,
+        width: isMobile ? window.innerWidth * 0.92 : 
+                (win.id === 'welcome' ? 500 :
+                 win.id === 'help' ? 500 :
+                 win.id === 'features' ? 700 : 
+                 win.id === 'pricing' ? 600 : 550)
+      })));
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const [maxZIndex, setMaxZIndex] = useState<number>(10);
   const dragRef = useRef<{
     isDragging: boolean;
@@ -187,8 +248,8 @@ const MacLandingPage: React.FC<MacLandingPageProps> = ({ onShowAuth, onShowPayme
       const newLeft = initialLeft + deltaX;
 
       // Update the desktop icon position
-      setDesktopIconPositions(prev =>
-        prev.map(pos =>
+      setDesktopIconPositions((prev: DesktopIconPosition[]) =>
+        prev.map((pos: DesktopIconPosition) =>
           pos.top === initialTop && pos.left === initialLeft
             ? { ...pos, top: newTop, left: newLeft }
             : pos
@@ -223,19 +284,10 @@ const MacLandingPage: React.FC<MacLandingPageProps> = ({ onShowAuth, onShowPayme
             }}
             onMouseDown={(e) => handleIconMouseDown(e, iconPos.id)}
             onClick={() => {
-              playMacSound('CLICK');
+              playClick();
               openWindow(iconPos.id);
             }}
           >
-            {iconPos.id === 'upload' && (
-              <>
-                <div className="mac-desktop-icon-img">
-                  <span role="img" aria-label="upload">💾</span>
-                </div>
-                <span className="mac-desktop-icon-label">Upload CSV</span>
-              </>
-            )}
-            
             {iconPos.id === 'aboutUs' && (
               <>
                 <div className="mac-desktop-icon-img">
@@ -262,6 +314,15 @@ const MacLandingPage: React.FC<MacLandingPageProps> = ({ onShowAuth, onShowPayme
                 <span className="mac-desktop-icon-label">Free Trial</span>
               </>
             )}
+            
+            {iconPos.id === 'upload' && (
+              <>
+                <div className="mac-desktop-icon-img">
+                  <span role="img" aria-label="upload">💾</span>
+                </div>
+                <span className="mac-desktop-icon-label">Upload CSV</span>
+              </>
+            )}
           </div>
         ))}
       </div>
@@ -271,15 +332,15 @@ const MacLandingPage: React.FC<MacLandingPageProps> = ({ onShowAuth, onShowPayme
         <div 
           className="mac-desktop-window" 
           style={{
-            top: `${windowPositions.find(w => w.id === 'help')?.top}px`,
-            left: `${windowPositions.find(w => w.id === 'help')?.left}px`,
-            width: `${windowPositions.find(w => w.id === 'help')?.width}px`,
-            zIndex: windowPositions.find(w => w.id === 'help')?.zIndex
+            top: `${windowPositions.find((w: WindowPosition) => w.id === 'help')?.top}px`,
+            left: `${windowPositions.find((w: WindowPosition) => w.id === 'help')?.left}px`,
+            width: `${windowPositions.find((w: WindowPosition) => w.id === 'help')?.width}px`,
+            zIndex: windowPositions.find((w: WindowPosition) => w.id === 'help')?.zIndex
           }}
         >
           <div 
             className="mac-window-title flex items-center justify-between cursor-move"
-            onMouseDown={(e) => handleMouseDown(e, 'help')}
+            onMouseDown={(e: React.MouseEvent) => handleMouseDown(e, 'help')}
           >
             <div className="mac-window-controls">
               <div className="mac-window-control mac-window-close" onClick={() => closeWindow('help')}></div>
@@ -312,15 +373,15 @@ const MacLandingPage: React.FC<MacLandingPageProps> = ({ onShowAuth, onShowPayme
         <div 
           className="mac-desktop-window" 
           style={{
-            top: `${windowPositions.find(w => w.id === 'features')?.top}px`,
-            left: `${windowPositions.find(w => w.id === 'features')?.left}px`,
-            width: `${windowPositions.find(w => w.id === 'features')?.width}px`,
-            zIndex: windowPositions.find(w => w.id === 'features')?.zIndex
+            top: `${windowPositions.find((w: WindowPosition) => w.id === 'features')?.top}px`,
+            left: `${windowPositions.find((w: WindowPosition) => w.id === 'features')?.left}px`,
+            width: `${windowPositions.find((w: WindowPosition) => w.id === 'features')?.width}px`,
+            zIndex: windowPositions.find((w: WindowPosition) => w.id === 'features')?.zIndex
           }}
         >
           <div 
             className="mac-window-title flex items-center justify-between cursor-move"
-            onMouseDown={(e) => handleMouseDown(e, 'features')}
+            onMouseDown={(e: React.MouseEvent) => handleMouseDown(e, 'features')}
           >
             <div className="mac-window-controls">
               <div className="mac-window-control mac-window-close" onClick={() => closeWindow('features')}></div>
@@ -357,15 +418,15 @@ const MacLandingPage: React.FC<MacLandingPageProps> = ({ onShowAuth, onShowPayme
         <div 
           className="mac-desktop-window" 
           style={{
-            top: `${windowPositions.find(w => w.id === 'pricing')?.top}px`,
-            left: `${windowPositions.find(w => w.id === 'pricing')?.left}px`,
-            width: `${windowPositions.find(w => w.id === 'pricing')?.width}px`,
-            zIndex: windowPositions.find(w => w.id === 'pricing')?.zIndex
+            top: `${windowPositions.find((w: WindowPosition) => w.id === 'pricing')?.top}px`,
+            left: `${windowPositions.find((w: WindowPosition) => w.id === 'pricing')?.left}px`,
+            width: `${windowPositions.find((w: WindowPosition) => w.id === 'pricing')?.width}px`,
+            zIndex: windowPositions.find((w: WindowPosition) => w.id === 'pricing')?.zIndex
           }}
         >
           <div 
             className="mac-window-title flex items-center justify-between cursor-move"
-            onMouseDown={(e) => handleMouseDown(e, 'pricing')}
+            onMouseDown={(e: React.MouseEvent) => handleMouseDown(e, 'pricing')}
           >
             <div className="mac-window-controls">
               <div className="mac-window-control mac-window-close" onClick={() => closeWindow('pricing')}></div>
@@ -409,15 +470,15 @@ const MacLandingPage: React.FC<MacLandingPageProps> = ({ onShowAuth, onShowPayme
         <div 
           className="mac-desktop-window" 
           style={{
-            top: `${windowPositions.find(w => w.id === 'upload')?.top}px`,
-            left: `${windowPositions.find(w => w.id === 'upload')?.left}px`,
-            width: `${windowPositions.find(w => w.id === 'upload')?.width}px`,
-            zIndex: windowPositions.find(w => w.id === 'upload')?.zIndex
+            top: `${windowPositions.find((w: WindowPosition) => w.id === 'upload')?.top}px`,
+            left: `${windowPositions.find((w: WindowPosition) => w.id === 'upload')?.left}px`,
+            width: `${windowPositions.find((w: WindowPosition) => w.id === 'upload')?.width}px`,
+            zIndex: windowPositions.find((w: WindowPosition) => w.id === 'upload')?.zIndex
           }}
         >
           <div 
             className="mac-window-title flex items-center justify-between cursor-move"
-            onMouseDown={(e) => handleMouseDown(e, 'upload')}
+            onMouseDown={(e: React.MouseEvent) => handleMouseDown(e, 'upload')}
           >
             <div className="mac-window-controls">
               <div className="mac-window-control mac-window-close" onClick={() => closeWindow('upload')}></div>
@@ -446,15 +507,15 @@ const MacLandingPage: React.FC<MacLandingPageProps> = ({ onShowAuth, onShowPayme
         <div 
           className="mac-desktop-window" 
           style={{
-            top: `${windowPositions.find(w => w.id === 'welcome')?.top}px`,
-            left: `${windowPositions.find(w => w.id === 'welcome')?.left}px`,
-            width: `${windowPositions.find(w => w.id === 'welcome')?.width}px`,
-            zIndex: windowPositions.find(w => w.id === 'welcome')?.zIndex
+            top: `${windowPositions.find((w: WindowPosition) => w.id === 'welcome')?.top}px`,
+            left: `${windowPositions.find((w: WindowPosition) => w.id === 'welcome')?.left}px`,
+            width: `${windowPositions.find((w: WindowPosition) => w.id === 'welcome')?.width}px`,
+            zIndex: windowPositions.find((w: WindowPosition) => w.id === 'welcome')?.zIndex
           }}
         >
           <div 
             className="mac-window-title flex items-center justify-between cursor-move"
-            onMouseDown={(e) => handleMouseDown(e, 'welcome')}
+            onMouseDown={(e: React.MouseEvent) => handleMouseDown(e, 'welcome')}
           >
             <div className="mac-window-controls">
               <div className="mac-window-control mac-window-close" onClick={() => closeWindow('welcome')}></div>
@@ -476,8 +537,9 @@ const MacLandingPage: React.FC<MacLandingPageProps> = ({ onShowAuth, onShowPayme
             <button 
               className="retro-gradient-btn px-8 py-2 mx-auto"
               onClick={() => {
-                playMacSound('CLICK');
+                playClick(); // Play click sound
                 closeWindow('welcome');
+                onShowAuth(); // Start the authentication flow
               }}
             >
               [ Drop that csv like its hot ]

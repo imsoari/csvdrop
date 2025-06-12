@@ -5,12 +5,14 @@
 
 /* Mac OS Desktop Background */
 .mac-os-desktop {
-  background-color: #5588bb;
+  background-color: #0066AA; /* Classic blue Mac OS background */
   background-image: url('/patterns/grid.svg');
   background-size: 20px 20px;
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Mac OS Menu Bar */
@@ -99,11 +101,47 @@
   content: 'x';
 }
 
+.mac-window-spacer {
+  flex-grow: 1;
+}
+
+.mac-window-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
 .mac-window-title-text {
   flex-grow: 1;
   font-family: 'Chicago', monospace;
   font-size: 12px;
   text-align: center;
+}
+
+.mac-title {
+  color: white;
+  font-family: 'Chicago', monospace;
+  font-size: 14px;
+  text-shadow: 1px 1px 0px rgba(0,0,0,0.5);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  user-select: none;
+}
+
+.mac-icon-csv {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000'%3E%3Cpath d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2l5 5h-5V4zM6 20V4h5v7h7v9H6z'/%3E%3C/svg%3E");
+}
+
+.mac-icon-info {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z'/%3E%3C/svg%3E");
+}
+
+.mac-icon-globe {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z'/%3E%3C/svg%3E");
 }
 
 /* Classic Mac Scrollbars */
@@ -145,14 +183,23 @@
   padding: 10px;
 }
 
-.mac-folder-item {
+.mac-desktop-icon {
   display: flex;
   flex-direction: column;
   align-items: center;
   cursor: pointer;
+  width: 80px;
+  transition: transform 0.1s;
+  margin-bottom: 10px;
+  padding: 5px;
+  border-radius: 2px;
 }
 
-.mac-folder-icon {
+.mac-desktop-icon:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.mac-icon {
   width: 48px;
   height: 48px;
   margin-bottom: 5px;
@@ -370,13 +417,21 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpolygon points='16,2 30,28 2,28' fill='%23f3f3f3' stroke='%231b1b1b' stroke-width='2'/%3E%3Ctext x='16' y='24' text-anchor='middle' font-family='Geneva' font-weight='bold' font-size='20' fill='%231b1b1b'%3E!%3C/text%3E%3C/svg%3E");
 }
 
-/* Dashboard Layout */
-.mac-dashboard-container {
-  padding-top: 30px;
-  padding-bottom: 30px;
+/* Desktop Icons */
+.mac-desktop-icons-column {
+  position: fixed;
+  left: 0;
+  top: 20px; /* Right below menu bar */
+  bottom: 22px; /* Right above status bar */
+  width: 85px;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  align-items: center;
+  gap: 24px;
+  z-index: 5;
+  background-color: #6699CC; /* Match the blue from the image */
+  padding-top: 20px;
+  border-right: 1px solid #4477AA;
 }
 
 .mac-desktop-container {
@@ -386,6 +441,15 @@
   width: 100%;
   flex-grow: 1;
   position: relative;
+}
+
+/* Dashboard Layout */
+.mac-dashboard-container {
+  padding-top: 30px;
+  padding-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 /* Classic Mac Checkbox */
@@ -414,6 +478,150 @@
 }
 
 .mac-checkbox-label {
+  font-family: 'Geneva', sans-serif;
+  font-size: 12px;
+}
+
+/* Pop-up Windows */
+.mac-popup-window {
+  position: absolute;
+  top: 80px;
+  left: 180px;
+  width: 400px;
+  background-color: #fff;
+  border: 2px solid #000;
+  border-radius: 0;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  animation: mac-window-open 0.2s ease-out;
+  transition: width 0.2s ease-out, height 0.2s ease-out;
+}
+
+/* Active window focus effect */
+.mac-popup-window:focus-within .mac-window-header {
+  background: repeating-linear-gradient(
+    to bottom,
+    #474747, 
+    #474747 1px,
+    #676767 1px,
+    #676767 2px
+  );
+}
+
+/* Maximized window style */
+.mac-window-maximized {
+  width: 80% !important;
+  height: auto !important;
+  min-height: 70% !important;
+  left: 10% !important;
+  top: 60px !important;
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.3);
+  animation: mac-window-maximize 0.2s ease-out;
+}
+
+@keyframes mac-window-maximize {
+  0% {
+    transform: scale(0.95);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes mac-window-open {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Window Headers with classic Mac stripes */
+.mac-window-header {
+  display: flex;
+  align-items: center;
+  padding: 2px 6px;
+  background: repeating-linear-gradient(
+    to bottom,
+    #6b6b6b,
+    #6b6b6b 1px,
+    #878787 1px,
+    #878787 2px
+  );
+  cursor: grab;
+  user-select: none;
+}
+
+/* Header style when dragging */
+.mac-window-header:active {
+  cursor: grabbing;
+  background: repeating-linear-gradient(
+    to bottom,
+    #515151,
+    #515151 1px,
+    #676767 1px,
+    #676767 2px
+  );
+}
+
+.mac-window-controls {
+  display: flex;
+  align-items: center;
+}
+
+.mac-close-box {
+  width: 12px;
+  height: 12px;
+  border: 1px solid #000000;
+  background-color: #ffffff;
+  margin-right: 6px;
+  position: relative;
+  cursor: pointer;
+}
+
+.mac-close-box:hover::before,
+.mac-close-box:hover::after {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 1px;
+  background-color: #000000;
+  top: 5px;
+  left: 1px;
+}
+
+.mac-close-box:hover::before {
+  transform: rotate(45deg);
+}
+
+.mac-close-box:hover::after {
+  transform: rotate(-45deg);
+}
+
+.mac-title {
+  color: #ffffff;
+  font-family: 'Chicago', sans-serif;
+  font-size: 12px;
+  text-align: center;
+  flex: 1;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
+}
+
+.mac-window-spacer {
+  width: 12px;
+}
+
+.mac-window-content {
+  padding: 15px;
+  background-color: #ffffff;
+  overflow: auto;
+  max-height: 70vh;
   font-family: 'Geneva', sans-serif;
   font-size: 12px;
 }

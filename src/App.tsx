@@ -1,11 +1,13 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from './hooks/useAuth';
 import { useProfile } from './hooks/useProfile';
 import { useSubscription } from './hooks/useSubscription';
 import { analytics } from './lib/analytics';
 import useMacSounds from './hooks/useMacSounds';
+import { setupMobileViewport, isMobileDevice } from './utils/mobileUtils';
 import './styles/macintosh.css';
+import './styles/mobile-responsive.css'; // Mobile responsive styles
 
 // Components
 import SuccessPage from './components/SuccessPage';
@@ -40,6 +42,17 @@ function App() {
     playDisk 
   } = useMacSounds(true);
   
+  // Initialize mobile viewport adaptations
+  useEffect(() => {
+    // Setup mobile viewport height adjustments
+    setupMobileViewport();
+    
+    // Add any mobile-specific classes to body if needed
+    if (isMobileDevice()) {
+      document.body.classList.add('mobile-device');
+    }
+  }, []);
+
   // Play startup sound on mount
   useEffect(() => {
     const timer = setTimeout(() => {
