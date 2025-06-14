@@ -43,13 +43,16 @@ const MacLandingPage: React.FC<MacLandingPageProps> = ({ onShowAuth, onShowPayme
   // Initialize window positions based on screen size
   useEffect(() => {
     const isMobile = window.innerWidth <= 768;
+    const welcomeWidth = isMobile ? window.innerWidth * 0.92 : 500;
+    const welcomeLeft = (window.innerWidth - welcomeWidth) / 2; // Center horizontally
+    const welcomeTop = isMobile ? 80 : Math.max(50, (window.innerHeight - 350) / 2); // Center vertically with min top padding
     
     setWindowPositions([
       { 
         id: 'welcome', 
-        top: isMobile ? 60 : 100, 
-        left: isMobile ? window.innerWidth * 0.04 : 100, 
-        width: isMobile ? window.innerWidth * 0.92 : 500, 
+        top: welcomeTop, 
+        left: welcomeLeft, 
+        width: welcomeWidth, 
         zIndex: 10 
       },
       { 
@@ -86,16 +89,29 @@ const MacLandingPage: React.FC<MacLandingPageProps> = ({ onShowAuth, onShowPayme
     const handleResize = () => {
       const isMobile = window.innerWidth <= 768;
       
-      setWindowPositions((prev: WindowPosition[]) => prev.map((win: WindowPosition) => ({
-        ...win,
-        top: isMobile ? Math.min(win.top, 90) : win.top,
-        left: isMobile ? window.innerWidth * 0.04 : win.left,
-        width: isMobile ? window.innerWidth * 0.92 : 
-                (win.id === 'welcome' ? 500 :
-                 win.id === 'help' ? 500 :
-                 win.id === 'features' ? 700 : 
-                 win.id === 'pricing' ? 600 : 550)
-      })));
+      setWindowPositions((prev: WindowPosition[]) => prev.map((win: WindowPosition) => {
+        if (win.id === 'welcome') {
+          const welcomeWidth = isMobile ? window.innerWidth * 0.92 : 500;
+          const welcomeLeft = (window.innerWidth - welcomeWidth) / 2; // Keep welcome centered on resize
+          const welcomeTop = isMobile ? 80 : Math.max(50, (window.innerHeight - 350) / 2);
+          return {
+            ...win,
+            top: welcomeTop,
+            left: welcomeLeft,
+            width: welcomeWidth,
+            zIndex: 10
+          };
+        }
+        return {
+          ...win,
+          top: isMobile ? Math.min(win.top, 90) : win.top,
+          left: isMobile ? window.innerWidth * 0.04 : win.left,
+          width: isMobile ? window.innerWidth * 0.92 : 
+                  (win.id === 'help' ? 500 :
+                   win.id === 'features' ? 700 : 
+                   win.id === 'pricing' ? 600 : 550)
+        };
+      }));
     };
     
     window.addEventListener('resize', handleResize);
