@@ -153,6 +153,9 @@ function App() {
     
     // Track onboarding completion
     analytics.track('Onboarding Completed');
+    
+    // Show auth modal after onboarding completion
+    setShowAuthModal(true);
   };
 
 
