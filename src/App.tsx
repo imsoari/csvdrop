@@ -154,8 +154,8 @@ function App() {
     // Track onboarding completion
     analytics.track('Onboarding Completed');
     
-    // Show auth modal after onboarding completion
-    setShowAuthModal(true);
+    // Users can now access the main CSV processing feature directly
+    // Auth modal will only show if they try to save/download or access premium features
   };
 
 
@@ -180,7 +180,7 @@ function App() {
   }
 
   // Determine which page to show
-  const shouldShowDashboard = user && profile;  // Allow access with just a profile, KYC not required
+  const shouldShowDashboard = (user && profile) || profile?.has_seen_onboarding;  // Allow access after onboarding, even without auth
 
   return (
     <Router>
