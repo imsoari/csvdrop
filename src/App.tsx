@@ -133,10 +133,7 @@ function App() {
     setShowAuthModal(false);
     playSuccess();
     
-    // Check if user needs onboarding
-    if (user && !profile) {
-      setShowOnboardingModal(true);
-    }
+    // Don't automatically show onboarding - let users trigger it from landing page
     
     // Track authentication event
     analytics.track('User Authenticated');
@@ -212,6 +209,10 @@ function App() {
                 }}
                 onShowPayment={() => {
                   setShowPaymentModal(true);
+                  playClick();
+                }}
+                onShowOnboarding={() => {
+                  setShowOnboardingModal(true);
                   playClick();
                 }}
               />

@@ -6,6 +6,7 @@ import '../styles/macintosh.css';
 interface MacLandingPageProps {
   onShowAuth: () => void;
   onShowPayment: () => void;
+  onShowOnboarding?: () => void;
 }
 
 interface WindowPosition {
@@ -23,7 +24,7 @@ interface DesktopIconPosition {
   zIndex: number;
 }
 
-const MacLandingPage: React.FC<MacLandingPageProps> = ({ onShowAuth, onShowPayment }) => {
+const MacLandingPage: React.FC<MacLandingPageProps> = ({ onShowAuth, onShowPayment, onShowOnboarding }) => {
   // Initialize Mac sounds
   const { playClick } = useMacSounds(true);
   
@@ -555,7 +556,7 @@ const MacLandingPage: React.FC<MacLandingPageProps> = ({ onShowAuth, onShowPayme
               onClick={() => {
                 playClick(); // Play click sound
                 closeWindow('welcome');
-                onShowAuth(); // Start the authentication flow
+                onShowOnboarding && onShowOnboarding(); // Start the onboarding flow
               }}
             >
               [ Drop that csv like its hot ]
