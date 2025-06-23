@@ -534,9 +534,9 @@ const MacLandingPage: React.FC<MacLandingPageProps> = ({ onShowAuth, onShowPayme
         </div>
       )}
       
-      {activeWindows.includes('welcome') && (
+      {(activeWindows.includes('welcome') || true) && (
         <div 
-          className="mac-window absolute bg-gray-100 shadow-lg" 
+          className="mac-window absolute bg-gray-100 shadow-lg border-2 border-gray-400" 
           style={{
             top: `${windowPositions.find((w: WindowPosition) => w.id === 'welcome')?.top || 100}px`,
             left: `${windowPositions.find((w: WindowPosition) => w.id === 'welcome')?.left || 250}px`,
@@ -569,8 +569,10 @@ const MacLandingPage: React.FC<MacLandingPageProps> = ({ onShowAuth, onShowPayme
             <button 
               className="retro-gradient-btn px-8 py-2 mx-auto"
               onClick={() => {
-                playClick(); // Play click sound
+                console.log('Drop that csv button clicked!');
+                playClick?.(); // Play click sound
                 closeWindow('welcome');
+                console.log('Triggering onboarding modal...');
                 onShowOnboarding && onShowOnboarding(); // Start the onboarding flow
               }}
             >
