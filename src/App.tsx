@@ -160,8 +160,8 @@ function App() {
     // Track onboarding completion
     analytics.track('Onboarding Completed');
     
-    // Users can now access the main CSV processing feature directly
-    // Auth modal will only show if they try to save/download or access premium features
+    // Show auth modal after onboarding completion
+    setShowAuthModal(true);
   };
 
 
@@ -245,9 +245,6 @@ function App() {
             playClick();
             handleAuthSuccess();
           }}
-          playSuccess={playSuccess}
-          playError={playError}
-          playClick={playClick}
         />
 
         <MacOnboardingModal
