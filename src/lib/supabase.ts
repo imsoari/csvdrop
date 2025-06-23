@@ -95,13 +95,13 @@ const withErrorHandling = async <T>(operation: () => Promise<T>, operationName: 
 };
 
 // Auth helpers with enhanced error handling
-export const signUp = async (email: string, password: string) => {
+export const signUp = async (email: string, password: string): Promise<{ data: { user: any } | null, error: any | null }> => {
   if (useMockAuth) {
     return mockSignUp(email);
   }
   
   try {
-    const result = await supabase.auth.signUp({
+    const result = await (supabase as any).auth.signUp({
       email,
       password,
       options: {
@@ -161,24 +161,25 @@ export const signOut = async () => {
   }
 };
 
-export const getCurrentUser = async () => {
+export const getCurrentUser = async (): Promise<{ user: any | null, error?: any }> => {
   if (useMockAuth) {
-    return await mockGetCurrentUser();
+    const result = await mockGetCurrentUser();
+    return { user: result.user || null, error: result.error || null };
   }
   
   try {
     // First try to get from existing session
     const sessionResult = await supabase.auth.getSession();
     if (sessionResult.data?.session?.user) {
-      return { user: sessionResult.data.session.user };
+      return { user: sessionResult.data.session.user, error: null };
     }
     
     // If no session, try to get user directly
     const userResult = await supabase.auth.getUser();
-    return { user: userResult.data?.user || null };
+    return { user: userResult.data?.user || null, error: userResult.error };
   } catch (error: unknown) {
     console.error('Error getting current user:', error);
-    return { user: null };
+    return { user: null, error: error };
   }
 };
 
