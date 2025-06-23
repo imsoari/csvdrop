@@ -15,7 +15,7 @@ export const useAuth = () => {
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      async (_event, session) => {
         setUser(session?.user ?? null);
         setLoading(false);
       }
@@ -25,21 +25,27 @@ export const useAuth = () => {
   }, []);
 
   const login = async (email: string, password: string) => {
-    const { data, error } = await signIn(email, password);
-    return { data, error };
+    const result = await signIn(email, password);
+    if (result.error) {
+      throw new Error(result.error.message || 'Sign in failed');
+    }
+    return result.data;
   };
 
   const register = async (email: string, password: string) => {
-    const { data, error } = await signUp(email, password);
-    return { data, error };
+    const result = await signUp(email, password);
+    if (result.error) {
+      throw new Error(result.error.message || 'Sign up failed');
+    }
+    return result.data;
   };
 
   const logout = async () => {
-    const { error } = await signOut();
-    if (!error) {
-      setUser(null);
+    const result = await signOut();
+    if (result.error) {
+      throw new Error(result.error.message || 'Sign out failed');
     }
-    return { error };
+    setUser(null);
   };
 
   return {

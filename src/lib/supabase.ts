@@ -100,21 +100,24 @@ export const signUp = async (email: string, password: string) => {
     return mockSignUp(email);
   }
   
-  return withErrorHandling(
-    async () => {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: 'https://example.com/welcome',
-        },
-      });
-      
-      if (error) throw error;
-      return data;
-    },
-    'signUp'
-  );
+  try {
+    const result = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: window.location.origin + '/welcome',
+      },
+    });
+    
+    if (result.error) {
+      throw new Error(result.error.message);
+    }
+    
+    return { data: result.data, error: null };
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Sign up failed';
+    return { data: null, error: { message } };
+  }
 };
 
 export const signIn = async (email: string, password: string) => {
@@ -122,18 +125,21 @@ export const signIn = async (email: string, password: string) => {
     return mockSignIn(email);
   }
   
-  return withErrorHandling(
-    async () => {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      
-      if (error) throw error;
-      return data;
-    },
-    'signIn'
-  );
+  try {
+    const result = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    
+    if (result.error) {
+      throw new Error(result.error.message);
+    }
+    
+    return { data: result.data, error: null };
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Sign in failed';
+    return { data: null, error: { message } };
+  }
 };
 
 export const signOut = async () => {
@@ -141,39 +147,39 @@ export const signOut = async () => {
     return mockSignOut();
   }
   
-  return withErrorHandling(
-    async () => {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
-      return { error: null };
-    },
-    'signOut'
-  );
+  try {
+    const result = await supabase.auth.signOut();
+    
+    if (result.error) {
+      throw new Error(result.error.message);
+    }
+    
+    return { error: null };
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Sign out failed';
+    return { error: { message } };
+  }
 };
 
 export const getCurrentUser = async () => {
   if (useMockAuth) {
-    return mockGetCurrentUser();
+    return await mockGetCurrentUser();
   }
   
-  return withErrorHandling(
-    async () => {
-      // First try to get from existing session
-      try {
-        const { data } = await supabase.auth.getSession();
-        if (data?.session?.user) {
-          return { user: data.session.user };
-        }
-      } catch {
-        console.warn('Could not get session, falling back to getUser');
-      }
-      
-      // If no session, try to get user directly
-      const { data } = await supabase.auth.getUser();
-      return { user: data?.user || null };
-    },
-    'getCurrentUser'
-  );
+  try {
+    // First try to get from existing session
+    const sessionResult = await supabase.auth.getSession();
+    if (sessionResult.data?.session?.user) {
+      return { user: sessionResult.data.session.user };
+    }
+    
+    // If no session, try to get user directly
+    const userResult = await supabase.auth.getUser();
+    return { user: userResult.data?.user || null };
+  } catch (error: unknown) {
+    console.error('Error getting current user:', error);
+    return { user: null };
+  }
 };
 
 // Edge function caller with better error handling

@@ -53,37 +53,33 @@ const MacAuthModal: React.FC<MacAuthModalProps> = ({
     try {
       if (isSignIn) {
         await login(email, password);
-        setSuccessMessage('Sign in successful!');
+        setSuccessMessage('Welcome back!');
       } else {
         await register(email, password);
-        setSuccessMessage('Account created successfully!');
+        setSuccessMessage('Account created successfully! Welcome to CSVDROP!');
       }
       
-      // Don't close immediately - show success message first
+      // Show success message briefly before closing
       setTimeout(() => {
         onClose();
         setSuccessMessage('');
-        // Reset form after successful authentication
         setEmail('');
         setPassword('');
       }, 1500);
     } catch (err: unknown) {
       console.error('Authentication error:', err);
       
-      // More specific error messages
+      // Simple, user-friendly error messages
       const errorMessage = err instanceof Error ? err.message : String(err);
-      if (errorMessage?.includes('invalid-email')) {
-        setError('Invalid email format. Please check and try again.');
-      } else if (errorMessage?.includes('wrong-password') || errorMessage?.includes('invalid-credential')) {
-        setError('Incorrect email or password. Please try again.');
-      } else if (errorMessage?.includes('user-not-found')) {
-        setError('Account not found. Please sign up instead.');
-      } else if (errorMessage?.includes('email-already-in-use')) {
-        setError('Email is already in use. Try signing in instead.');
-      } else if (errorMessage?.includes('network-request-failed')) {
-        setError('Network error. Please check your connection and try again.');
+      
+      if (errorMessage.toLowerCase().includes('invalid') || errorMessage.toLowerCase().includes('wrong')) {
+        setError(isSignIn ? 'Incorrect email or password.' : 'Please check your email and password.');
+      } else if (errorMessage.toLowerCase().includes('exist')) {
+        setError('This email is already registered. Try signing in instead.');
+      } else if (errorMessage.toLowerCase().includes('network')) {
+        setError('Connection error. Please try again.');
       } else {
-        setError('Authentication failed. Please check your credentials and try again.');
+        setError(isSignIn ? 'Sign in failed. Please try again.' : 'Sign up failed. Please try again.');
       }
     } finally {
       setLoading(false);
