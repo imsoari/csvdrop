@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import useMacSounds from '../hooks/useMacSounds';
 import { Link } from 'react-router-dom';
 import '../styles/macintosh.css';
@@ -178,7 +178,7 @@ const MacLandingPage: React.FC<MacLandingPageProps> = ({ onShowAuth, onShowPayme
     document.addEventListener('mouseup', handleMouseUp);
   };
   
-  const handleMouseMove = (e: MouseEvent) => {
+  const handleMouseMove = useCallback((e: MouseEvent) => {
     const { isDragging, windowId, initialX, initialY, initialTop, initialLeft } = dragRef.current;
     
     if (isDragging && windowId) {
@@ -197,16 +197,16 @@ const MacLandingPage: React.FC<MacLandingPageProps> = ({ onShowAuth, onShowPayme
         )
       );
     }
-  };
+  }, []);
   
-  const handleMouseUp = () => {
+  const handleMouseUp = useCallback(() => {
     dragRef.current.isDragging = false;
     
     // Remove event listeners
     document.removeEventListener('mousemove', handleMouseMove);
     document.removeEventListener('mouseup', handleMouseUp);
-  };
-  
+  }, [handleMouseMove]);
+
   useEffect(() => {
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
@@ -215,7 +215,7 @@ const MacLandingPage: React.FC<MacLandingPageProps> = ({ onShowAuth, onShowPayme
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
-  }, []);
+  }, [handleMouseMove, handleMouseUp]);
 
   const [desktopIconPositions, setDesktopIconPositions] = useState<DesktopIconPosition[]>([
     { id: 'upload', top: 30, left: 30, zIndex: 5 },

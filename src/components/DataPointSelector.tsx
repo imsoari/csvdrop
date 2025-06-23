@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Check, Search, Sparkles, ArrowRight, RefreshCw, Eye, EyeOff } from 'lucide-react';
 import { CSVFile, STANDARD_DATA_POINTS, DataPointMapping } from '../utils/csvProcessor';
 
@@ -25,14 +25,7 @@ const DataPointSelector: React.FC<DataPointSelectorProps> = ({
   const [showMappings, setShowMappings] = useState(false);
   const [autoMappingInProgress, setAutoMappingInProgress] = useState(false);
 
-  // Auto-suggest mappings when files change
-  useEffect(() => {
-    if (files.length > 0 && Object.keys(mappings).length === 0) {
-      autoSuggestMappings();
-    }
-  }, [files]);
-
-  const autoSuggestMappings = async () => {
+  const autoSuggestMappings = useCallback(async () => {
     setAutoMappingInProgress(true);
     
     // Simulate processing time for better UX
@@ -62,7 +55,14 @@ const DataPointSelector: React.FC<DataPointSelectorProps> = ({
     
     onMappingsChange(newMappings);
     setAutoMappingInProgress(false);
-  };
+  }, [files, onMappingsChange]);
+
+  // Auto-suggest mappings when files change
+  useEffect(() => {
+    if (files.length > 0 && Object.keys(mappings).length === 0) {
+      autoSuggestMappings();
+    }
+  }, [files, autoSuggestMappings, mappings]);
 
   const filteredDataPoints = Object.entries(STANDARD_DATA_POINTS).filter(([key, config]) =>
     config.label.toLowerCase().includes(searchTerm.toLowerCase()) ||

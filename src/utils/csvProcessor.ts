@@ -41,7 +41,12 @@ export interface ConsolidationResult {
 }
 
 // Standard data points that users commonly want to consolidate
-export const STANDARD_DATA_POINTS = {
+export const STANDARD_DATA_POINTS: Record<string, {
+  label: string;
+  description: string;
+  icon: string;
+  commonHeaders: string[];
+}> = {
   'first_name': {
     label: 'First Name',
     description: 'Person\'s first name',
@@ -329,7 +334,7 @@ export class CSVProcessor {
       // Use data point-based consolidation
       useDataPointConsolidation = true;
       finalHeaders = options.dataPointSelection.selectedPoints.map(point => 
-        (STANDARD_DATA_POINTS as any)[point]?.label || point
+        STANDARD_DATA_POINTS[point]?.label || point
       );
       stats.dataPointsConsolidated = finalHeaders.length;
     } else {

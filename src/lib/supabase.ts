@@ -177,7 +177,7 @@ export const getCurrentUser = async () => {
 };
 
 // Edge function caller with better error handling
-export const callEdgeFunction = async (functionName: string, body: any) => {
+export const callEdgeFunction = async (functionName: string, body: Record<string, unknown>) => {
   if (useMockAuth) {
     // Mock implementation for edge functions
     console.log(`Mock edge function call to ${functionName}`, body);
@@ -203,7 +203,7 @@ export const createOrUpdateProfile = async (profileData: {
   lastName: string;
   email: string;
   hasSeenOnboarding?: boolean;
-}): Promise<{ data: UserProfile | null, error: any }> => {
+}): Promise<{ data: UserProfile | null, error: Error | null }> => {
   // In mock mode, just return success
   if (useMockAuth) {
     const mockProfile: UserProfile = {
@@ -226,7 +226,7 @@ export const updateProfile = async (updates: Partial<{
   firstName: string;
   lastName: string;
   hasSeenOnboarding: boolean;
-}>): Promise<{ data: UserProfile | null, error: any }> => {
+}>): Promise<{ data: UserProfile | null, error: Error | null }> => {
   // In mock mode, just return success
   if (useMockAuth) {
     const mockProfile: UserProfile = {
@@ -349,16 +349,16 @@ export const getDownloadHistory = async (page = 1, limit = 10) => {
 // Test connection on initialization (only for real Supabase)
 if (!useMockAuth && typeof window !== 'undefined') {
   try {
-    supabase.auth.getSession().then((response: any) => {
+    supabase.auth.getSession().then((response) => {
       if (response.error) {
         console.error('Supabase connection test failed:', response.error);
       } else {
         console.log('Supabase connection successful');
       }
-    }).catch(err => {
+    }).catch((err: Error) => {
       console.error('Supabase connection failed:', err);
     });
-  } catch (err) {
+  } catch (err: unknown) {
     console.error('Failed to test Supabase connection:', err);
   }
 }

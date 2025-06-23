@@ -103,7 +103,7 @@ Deno.serve(async (req: Request) => {
     }
 
     // Parse request body to get the intended method and data
-    let requestBody: any = {};
+    let requestBody: Record<string, unknown> = {};
     try {
       const bodyText = await req.text();
       if (bodyText) {
@@ -214,7 +214,7 @@ Deno.serve(async (req: Request) => {
           );
         }
 
-        const updateFields: any = {};
+        const updateFields: Record<string, unknown> = {};
         if (updateData.firstName) updateFields.first_name = updateData.firstName.trim();
         if (updateData.lastName) updateFields.last_name = updateData.lastName.trim();
         if (updateData.email) updateFields.email = updateData.email.trim();

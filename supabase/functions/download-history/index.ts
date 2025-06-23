@@ -79,7 +79,7 @@ Deno.serve(async (req: Request) => {
     }
 
     // Parse request body to get the intended method and data
-    let requestBody: any = {};
+    let requestBody: Record<string, unknown> = {};
     try {
       const bodyText = await req.text();
       if (bodyText) {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Download, CheckCircle, Calendar, FileText, Hash, X, Sparkles } from 'lucide-react';
 
 interface DownloadTicketProps {
@@ -22,6 +22,13 @@ const DownloadTicket: React.FC<DownloadTicketProps> = ({
 }) => {
   const [isAnimating, setIsAnimating] = useState(false);
 
+  const handleClose = useCallback(() => {
+    setIsAnimating(false);
+    setTimeout(() => {
+      onClose();
+    }, 300);
+  }, [onClose]);
+
   useEffect(() => {
     if (isVisible) {
       setIsAnimating(true);
@@ -31,14 +38,7 @@ const DownloadTicket: React.FC<DownloadTicketProps> = ({
       }, 10000);
       return () => clearTimeout(timer);
     }
-  }, [isVisible]);
-
-  const handleClose = () => {
-    setIsAnimating(false);
-    setTimeout(() => {
-      onClose();
-    }, 300);
-  };
+  }, [isVisible, handleClose]);
 
   if (!isVisible) return null;
 

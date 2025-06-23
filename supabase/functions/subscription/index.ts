@@ -48,7 +48,7 @@ Deno.serve(async (req: Request) => {
     }
 
     // Parse request body to get the intended method and data
-    let requestBody: any = {};
+    let requestBody: Record<string, unknown> = {};
     try {
       const bodyText = await req.text();
       if (bodyText) {
@@ -159,7 +159,7 @@ Deno.serve(async (req: Request) => {
           throw getCurrentError;
         }
 
-        const updateFields: any = {};
+        const updateFields: Record<string, unknown> = {};
         
         if (updateData.incrementDownloadCount) {
           updateFields.download_count = (currentSubscription.download_count || 0) + 1;
