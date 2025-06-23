@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import Dashboard from './components/Dashboard';
-import MacLandingPageNew from './components/MacLandingPageNew';
+import SimpleLanding from './components/SimpleLanding';
 import StreamlinedOnboarding from './components/StreamlinedOnboarding';
 import MacPaymentModal from './components/MacPaymentModal';
 import { useAuth } from './hooks/useAuth';
-import { useSounds } from './hooks/useSounds';
+import useMacSounds from './hooks/useMacSounds';
 import { useProfile } from './hooks/useProfile';
 import { useSubscription } from './hooks/useSubscription';
 import { analytics } from './lib/analytics';
@@ -16,7 +16,7 @@ function App() {
   const { user } = useAuth();
   const { profile, createProfile } = useProfile();
   const { subscription } = useSubscription();
-  const { playClick, playSuccess, playError } = useSounds();
+  const { playClick, playSuccess, playError } = useMacSounds();
   
   // Single onboarding modal state
   const [showOnboarding, setShowOnboarding] = useState(false);
@@ -71,9 +71,13 @@ function App() {
                 <Dashboard 
                   isTrialMode={isTrialMode}
                   onUpgrade={() => setShowPaymentModal(true)}
+                  onLogout={() => {
+                    setIsTrialMode(false);
+                    setShowOnboarding(false);
+                  }}
                 />
               ) : (
-                <MacLandingPageNew
+                <SimpleLanding
                   onShowAuth={() => setShowOnboarding(true)}
                   playClick={playClick}
                 />
@@ -97,9 +101,8 @@ function App() {
         <MacPaymentModal
           isOpen={showPaymentModal}
           onClose={() => setShowPaymentModal(false)}
-          onSuccess={handlePaymentSuccess}
+          onPaymentSuccess={handlePaymentSuccess}
           playSuccess={playSuccess}
-          playError={playError}
           playClick={playClick}
         />
 

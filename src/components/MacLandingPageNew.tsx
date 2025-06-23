@@ -14,68 +14,61 @@ const MacLandingPage: React.FC<MacLandingPageProps> = ({
       <div className="text-center max-w-4xl mx-auto">
         {/* Hero Section */}
         <div className="mb-12">
-          <h1 className="text-6xl font-bold text-white mb-6 retro-text-glow">
+          <h1 className="text-6xl font-bold text-white mb-6">
             CSV DROP
           </h1>
           <h2 className="text-2xl text-cyan-300 mb-8 font-mono">
             Your 90's file manager just got a modern upgrade
           </h2>
-          <p className="text-xl text-gray-300 mb-12 max-w-2xl mx-auto leading-relaxed">
-            Drop your CSV files, transform your data, and download clean results. 
-            No signup required to try - just drag, drop, and go!
+          <p className="text-lg text-gray-300 mb-12 max-w-2xl mx-auto">
+            Transform your CSV files with the power of AI. Clean, analyze, and process your data with retro style and modern performance.
           </p>
-        </div>
-
-        {/* CTA Section */}
-        <div className="space-y-6">
-          <button 
-            className="bg-cyan-500 hover:bg-cyan-400 text-black font-bold text-xl px-12 py-4 rounded-lg transition-all duration-200 transform hover:scale-105 retro-button-glow"
+          
+          {/* CTA Button */}
+          <button
             onClick={() => {
+              console.log('Main CTA clicked');
               playClick?.();
               onShowAuth?.();
             }}
+            className="px-12 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-black font-bold text-xl rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg shadow-cyan-500/25"
           >
-            🚀 Start Processing CSV Files
+            Start Processing Your CSV Files
           </button>
+        </div>
+
+        {/* Feature Preview */}
+        <div className="grid md:grid-cols-3 gap-8 mb-12">
+          <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6">
+            <div className="w-12 h-12 bg-cyan-500 rounded-lg mb-4 mx-auto flex items-center justify-center">
+              <span className="text-black font-bold">📊</span>
+            </div>
+            <h3 className="text-white font-bold mb-2">Smart Analysis</h3>
+            <p className="text-gray-300 text-sm">AI-powered insights and data validation</p>
+          </div>
           
-          <div className="text-sm text-gray-400">
-            Try it free • No credit card required • Process up to 3 files
+          <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6">
+            <div className="w-12 h-12 bg-purple-500 rounded-lg mb-4 mx-auto flex items-center justify-center">
+              <span className="text-white font-bold">⚡</span>
+            </div>
+            <h3 className="text-white font-bold mb-2">Lightning Fast</h3>
+            <p className="text-gray-300 text-sm">Process thousands of rows in seconds</p>
+          </div>
+          
+          <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-6">
+            <div className="w-12 h-12 bg-pink-500 rounded-lg mb-4 mx-auto flex items-center justify-center">
+              <span className="text-white font-bold">🎯</span>
+            </div>
+            <h3 className="text-white font-bold mb-2">Retro Vibes</h3>
+            <p className="text-gray-300 text-sm">Nostalgic interface, modern power</p>
           </div>
         </div>
 
-        {/* Features Preview */}
-        <div className="mt-16 grid md:grid-cols-3 gap-8 text-left">
-          <div className="bg-black/30 p-6 rounded-lg border border-cyan-500/30">
-            <div className="text-3xl mb-4">🔄</div>
-            <h3 className="text-cyan-300 font-bold mb-2">Transform Data</h3>
-            <p className="text-gray-300 text-sm">Clean, merge, and restructure your CSV files with powerful tools</p>
-          </div>
-          
-          <div className="bg-black/30 p-6 rounded-lg border border-cyan-500/30">
-            <div className="text-3xl mb-4">⚡</div>
-            <h3 className="text-cyan-300 font-bold mb-2">Lightning Fast</h3>
-            <p className="text-gray-300 text-sm">Process thousands of rows in seconds with our optimized engine</p>
-          </div>
-          
-          <div className="bg-black/30 p-6 rounded-lg border border-cyan-500/30">
-            <div className="text-3xl mb-4">🔒</div>
-            <h3 className="text-cyan-300 font-bold mb-2">Secure & Private</h3>
-            <p className="text-gray-300 text-sm">Your data never leaves your browser - complete privacy guaranteed</p>
-          </div>
-        </div>
-
-        {/* Bottom CTA */}
-        <div className="mt-16 text-center">
-          <p className="text-gray-400 mb-4">Ready to supercharge your data workflow?</p>
-          <button 
-            className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-bold px-8 py-3 rounded-lg transition-all duration-200"
-            onClick={() => {
-              playClick?.();
-              onShowAuth?.();
-            }}
-          >
-            Get Started Now →
-          </button>
+        {/* Footer */}
+        <div className="text-center">
+          <p className="text-gray-400 text-sm">
+            Built with ❤️ for data enthusiasts and retro computing fans
+          </p>
         </div>
       </div>
     </div>

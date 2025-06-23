@@ -4,7 +4,7 @@ import { useAuth } from '../hooks/useAuth';
 interface StreamlinedOnboardingProps {
   isOpen: boolean;
   onClose: () => void;
-  onComplete: () => void;
+  onComplete: (userChoseDemo?: boolean) => void;
   playClick?: () => void;
   playSuccess?: () => void;
   playError?: () => void;
@@ -18,7 +18,8 @@ const StreamlinedOnboarding: React.FC<StreamlinedOnboardingProps> = ({
   playSuccess,
   playError
 }) => {
-  const { login, register } = useAuth();
+  const authHook = useAuth();
+  const { login, register } = authHook || {};
   const [step, setStep] = useState<'welcome' | 'auth' | 'demo'>('welcome');
   const [isSignUp, setIsSignUp] = useState(true);
   const [email, setEmail] = useState('');
@@ -34,7 +35,7 @@ const StreamlinedOnboarding: React.FC<StreamlinedOnboardingProps> = ({
     // Allow users to try the app without auth
     setTimeout(() => {
       playSuccess?.();
-      onComplete();
+      onComplete(true);
     }, 1000);
   };
 
@@ -45,13 +46,19 @@ const StreamlinedOnboarding: React.FC<StreamlinedOnboardingProps> = ({
 
     try {
       if (isSignUp) {
+        if (!register) {
+          throw new Error('Register function is not available');
+        }
         await register(email, password);
         playSuccess?.();
       } else {
+        if (!login) {
+          throw new Error('Login function is not available');
+        }
         await login(email, password);
         playSuccess?.();
       }
-      onComplete();
+      onComplete(false);
     } catch (err: any) {
       playError?.();
       setError(err.message || 'Authentication failed');
@@ -185,7 +192,7 @@ const StreamlinedOnboarding: React.FC<StreamlinedOnboardingProps> = ({
       <button
         onClick={() => {
           playClick?.();
-          onComplete();
+          onComplete(true);
         }}
         className="w-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold py-4 px-6 rounded-lg transition-all duration-200 text-lg"
       >
