@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { User, LogOut, FileText, Crown, Settings, Share2, ChevronDown, Check } from 'lucide-react';
+import { User, LogOut, FileText, Crown, Settings, ChevronDown } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { useProfile } from '../hooks/useProfile';
 import { useSubscription } from '../hooks/useSubscription';
@@ -118,13 +118,6 @@ const Navbar: React.FC<NavbarProps> = ({ onDashboardClick, onAuthClick }) => {
                     <div className="w-10 h-10 bg-csv-gradient rounded-xl flex items-center justify-center shadow-2xl text-white font-black text-sm">
                       {getUserInitials()}
                     </div>
-                    
-                    {/* Verification Badge */}
-                    {profile?.kyc_verified && (
-                      <div className="absolute -top-1 -right-1 w-5 h-5 bg-csv-gradient rounded-full flex items-center justify-center shadow-2xl border-2 border-black">
-                        <Check className="w-3 h-3 text-black" />
-                      </div>
-                    )}
                   </div>
                   
                   {/* Subscription Badge */}
@@ -154,12 +147,6 @@ const Navbar: React.FC<NavbarProps> = ({ onDashboardClick, onAuthClick }) => {
                           <div className="w-16 h-16 bg-csv-gradient rounded-2xl flex items-center justify-center shadow-2xl text-white font-black text-lg">
                             {getUserInitials()}
                           </div>
-                          
-                          {profile?.kyc_verified && (
-                            <div className="absolute -top-2 -right-2 w-6 h-6 bg-csv-gradient rounded-full flex items-center justify-center shadow-2xl border-2 border-black">
-                              <Check className="w-4 h-4 text-black" />
-                            </div>
-                          )}
                         </div>
                         <div className="flex-1">
                           <p className="font-black text-white text-lg">
@@ -172,9 +159,6 @@ const Navbar: React.FC<NavbarProps> = ({ onDashboardClick, onAuthClick }) => {
                                 <subscriptionInfo.icon className="w-3 h-3" />
                                 {subscriptionInfo.text}
                               </span>
-                            )}
-                            {profile?.kyc_verified && (
-                              <span className="text-xs text-emerald-400 font-black uppercase tracking-wider">VERIFIED</span>
                             )}
                           </div>
                         </div>

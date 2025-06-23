@@ -142,29 +142,22 @@ function App() {
     analytics.track('User Authenticated');
   };
 
-  const handleOnboardingComplete = async (kycData?: { firstName: string; lastName: string; email: string }) => {
+  const handleOnboardingComplete = async () => {
     setShowOnboardingModal(false);
     playSuccess();
     
-    // Create or update profile with onboarding data
-    if (kycData) {
-      await createProfile({
-        firstName: kycData.firstName,
-        lastName: kycData.lastName,
-        email: kycData.email,
-        hasSeenOnboarding: true
-      });
-      
-      // Track onboarding completion
-      analytics.track('Onboarding Completed', kycData);
-    }
+    // Create or update profile to mark onboarding as complete
+    await createProfile({
+      hasSeenOnboarding: true
+    });
     
-
+    // Track onboarding completion
+    analytics.track('Onboarding Completed');
   };
 
 
 
-  const handlePaymentSuccess = (data: any) => {
+  const handlePaymentSuccess = (data: Record<string, unknown>) => {
     setShowPaymentModal(false);
     playSuccess();
     
@@ -243,7 +236,6 @@ function App() {
             playClick();
           }}
           onComplete={handleOnboardingComplete}
-          userEmail={user?.email}
           userName={profile?.first_name}
           playClick={playClick}
         />

@@ -54,7 +54,7 @@ Deno.serve(async (req: Request) => {
       if (bodyText) {
         requestBody = JSON.parse(bodyText);
       }
-    } catch (e) {
+    } catch {
       // If body parsing fails, continue with empty object
     }
 
@@ -62,7 +62,7 @@ Deno.serve(async (req: Request) => {
     const method = requestBody._method || req.method;
 
     switch (method) {
-      case 'GET':
+      case 'GET': {
         // Get user subscription
         const { data: subscription, error: getError } = await supabaseClient
           .from('subscriptions')
@@ -111,8 +111,9 @@ Deno.serve(async (req: Request) => {
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
           }
         );
+      }
 
-      case 'POST':
+      case 'POST': {
         // Create or update subscription
         const subscriptionData: SubscriptionData = requestBody;
 
@@ -142,8 +143,9 @@ Deno.serve(async (req: Request) => {
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
           }
         );
+      }
 
-      case 'PUT':
+      case 'PUT': {
         // Update subscription (e.g., increment download count)
         const updateData = requestBody;
         
@@ -192,8 +194,9 @@ Deno.serve(async (req: Request) => {
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
           }
         );
+      }
 
-      default:
+      default: {
         return new Response(
           JSON.stringify({ error: 'Method not allowed' }),
           {
@@ -201,15 +204,13 @@ Deno.serve(async (req: Request) => {
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
           }
         );
-    }
-  } catch (error) {
-    console.error('Error in subscription function:', error);
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      {
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       }
+    }
+  } catch {
+    console.error('Error in subscription function');
+    return new Response(
+      JSON.stringify({ error: 'Internal server error' }),
+      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
 });

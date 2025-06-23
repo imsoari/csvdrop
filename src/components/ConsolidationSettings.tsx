@@ -94,7 +94,7 @@ const ConsolidationSettings: React.FC<ConsolidationSettingsProps> = ({
                     name="method"
                     value={method.value}
                     checked={options.method === method.value}
-                    onChange={(e) => updateOption('method', e.target.value as any)}
+                    onChange={(e) => updateOption('method', e.target.value as 'merge' | 'union' | 'intersect')}
                     className="mt-1 sm:mt-2 w-5 h-5 sm:w-6 sm:h-6 text-cyan-400 focus:ring-cyan-400"
                   />
                   <div className="flex-1">
@@ -136,7 +136,7 @@ const ConsolidationSettings: React.FC<ConsolidationSettingsProps> = ({
                     name="headerHandling"
                     value={option.value}
                     checked={options.headerHandling === option.value}
-                    onChange={(e) => updateOption('headerHandling', e.target.value as any)}
+                    onChange={(e) => updateOption('headerHandling', e.target.value as 'first' | 'all' | 'custom')}
                     className="mt-1 sm:mt-2 w-5 h-5 sm:w-6 sm:h-6 text-purple-400 focus:ring-purple-400"
                   />
                   <div>

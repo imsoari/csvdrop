@@ -25,7 +25,7 @@ interface DesktopIconPosition {
 
 const MacLandingPage: React.FC<MacLandingPageProps> = ({ onShowAuth, onShowPayment }) => {
   // Initialize Mac sounds
-  const { playClick, playError, playSuccess, enabled: soundEnabled } = useMacSounds(true);
+  const { playClick } = useMacSounds(true);
   
   const [stepsCompleted, setStepsCompleted] = useState([false, false, false]);
   

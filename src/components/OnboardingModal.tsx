@@ -58,9 +58,10 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
           try {
             await createCheckoutSession('pro', userEmail || '', userName || '');
             return; // Redirect happens in createCheckoutSession
-          } catch (error: any) {
+          } catch (error: unknown) {
             console.error('Checkout error:', error);
-            setCheckoutError(error.message || 'Failed to create checkout session. Please try again.');
+            const errorMessage = error instanceof Error ? error.message : 'Failed to create checkout session. Please try again.';
+            setCheckoutError(errorMessage);
             return;
           }
         }
@@ -71,7 +72,7 @@ const OnboardingModal: React.FC<OnboardingModalProps> = ({
         // For other steps, just go to next step
         setCurrentStep(currentStep + 1);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error in handleNext:', error);
     } finally {
       setLoading(false);

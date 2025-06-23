@@ -65,7 +65,7 @@ Deno.serve(async (req: Request) => {
     console.log('Processing webhook event:', event.type);
 
     switch (event.type) {
-      case 'checkout.session.completed':
+      case 'checkout.session.completed': {
         const session = event.data.object as Stripe.Checkout.Session;
         
         if (session.mode === 'subscription') {
@@ -113,35 +113,92 @@ Deno.serve(async (req: Request) => {
           }
         }
         break;
+      }
 
-      case 'customer.subscription.updated':
-        const updatedSubscription = event.data.object as Stripe.Subscription;
+      case 'customer.subscription.created':
+      case 'customer.subscription.updated': {
+        const subscription = event.data.object as Stripe.Subscription;
         
-        await supabaseClient
-          .from('subscriptions')
-          .update({
-            status: updatedSubscription.status === 'active' ? 'active' : 'cancelled',
-            current_period_start: new Date(updatedSubscription.current_period_start * 1000).toISOString(),
-            current_period_end: new Date(updatedSubscription.current_period_end * 1000).toISOString(),
-          })
-          .eq('stripe_subscription_id', updatedSubscription.id);
-        break;
-
-      case 'customer.subscription.deleted':
-        const deletedSubscription = event.data.object as Stripe.Subscription;
+        // Extract customer information
+        const customerId = subscription.customer as string;
+        const priceId = subscription.items.data[0]?.price?.id;
         
-        await supabaseClient
+        // Determine subscription type
+        let subscriptionType: 'pro' | 'single' | null = null;
+        if (priceId === Deno.env.get('STRIPE_PRICE_ID_PRO')) {
+          subscriptionType = 'pro';
+        } else if (priceId === Deno.env.get('STRIPE_PRICE_ID_SINGLE')) {
+          subscriptionType = 'single';
+        }
+        
+        if (!subscriptionType) {
+          console.warn('Unknown price ID:', priceId);
+          return new Response('OK', { status: 200 });
+        }
+        
+        // Get user by Stripe customer ID
+        const { data: profiles, error: profileError } = await supabaseClient
+          .from('profiles')
+          .select('*')
+          .eq('stripe_customer_id', customerId)
+          .single();
+        
+        if (profileError || !profiles) {
+          console.error('Error finding user profile:', profileError);
+          return new Response('OK', { status: 200 });
+        }
+        
+        // Update subscription in database
+        const subscriptionData = {
+          user_id: profiles.id,
+          stripe_subscription_id: subscription.id,
+          stripe_customer_id: customerId,
+          status: subscription.status,
+          type: subscriptionType,
+          current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
+          current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
+          cancel_at_period_end: subscription.cancel_at_period_end,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        };
+        
+        const { error: subscriptionError } = await supabaseClient
           .from('subscriptions')
-          .update({
-            type: 'free',
-            status: 'cancelled',
-            download_count: 0,
-          })
-          .eq('stripe_subscription_id', deletedSubscription.id);
+          .upsert(subscriptionData, { onConflict: 'stripe_subscription_id' });
+        
+        if (subscriptionError) {
+          console.error('Error updating subscription:', subscriptionError);
+          return new Response('Internal Server Error', { status: 500 });
+        }
+        
         break;
-
-      case 'invoice.payment_succeeded':
+      }
+      
+      case 'customer.subscription.deleted': {
+        const subscription = event.data.object as Stripe.Subscription;
+        
+        // Update subscription status to cancelled
+        const { error } = await supabaseClient
+          .from('subscriptions')
+          .update({ 
+            status: 'canceled',
+            updated_at: new Date().toISOString()
+          })
+          .eq('stripe_subscription_id', subscription.id);
+        
+        if (error) {
+          console.error('Error canceling subscription:', error);
+          return new Response('Internal Server Error', { status: 500 });
+        }
+        
+        break;
+      }
+      
+      case 'invoice.payment_succeeded': {
         const invoice = event.data.object as Stripe.Invoice;
+        
+        // Log successful payment
+        console.log('Payment succeeded for invoice:', invoice.id);
         
         if (invoice.subscription) {
           // Reset download count for new billing period
@@ -153,8 +210,9 @@ Deno.serve(async (req: Request) => {
             .eq('stripe_subscription_id', invoice.subscription as string);
         }
         break;
-
-      case 'invoice.payment_failed':
+      }
+      
+      case 'invoice.payment_failed': {
         const failedInvoice = event.data.object as Stripe.Invoice;
         
         if (failedInvoice.subscription) {
@@ -167,6 +225,7 @@ Deno.serve(async (req: Request) => {
             .eq('stripe_subscription_id', failedInvoice.subscription as string);
         }
         break;
+      }
 
       default:
         console.log(`Unhandled event type: ${event.type}`);

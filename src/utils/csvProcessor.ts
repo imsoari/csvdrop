@@ -308,7 +308,7 @@ export class CSVProcessor {
   
   static consolidateFiles(files: CSVFile[], options: ConsolidationOptions): ConsolidationResult {
     const startTime = performance.now();
-    let stats = {
+    const stats = {
       totalRows: 0,
       duplicatesRemoved: 0,
       emptyRowsRemoved: 0,
@@ -329,17 +329,18 @@ export class CSVProcessor {
       // Use data point-based consolidation
       useDataPointConsolidation = true;
       finalHeaders = options.dataPointSelection.selectedPoints.map(point => 
-        STANDARD_DATA_POINTS[point]?.label || point
+        (STANDARD_DATA_POINTS as any)[point]?.label || point
       );
       stats.dataPointsConsolidated = finalHeaders.length;
     } else {
       // Use traditional header handling
       switch (options.headerHandling) {
-        case 'first':
+        case 'first': {
           finalHeaders = [...files[0].headers];
           break;
+        }
           
-        case 'all':
+        case 'all': {
           const headerSet = new Set<string>();
           files.forEach(file => {
             file.headers.forEach(header => headerSet.add(header.trim()));
@@ -347,14 +348,16 @@ export class CSVProcessor {
           finalHeaders = Array.from(headerSet).sort();
           stats.columnsAligned = finalHeaders.length;
           break;
+        }
           
-        case 'custom':
+        case 'custom': {
           if (options.customHeaders && options.customHeaders.length > 0) {
             finalHeaders = [...options.customHeaders];
           } else {
             finalHeaders = [...files[0].headers];
           }
           break;
+        }
       }
     }
     
@@ -406,22 +409,23 @@ export class CSVProcessor {
         
         // Only keep rows that appear in all files
         const intersectRows = Array.from(rowCounts.entries())
-          .filter(([_, count]) => count === files.length)
-          .map(([rowKey, _]) => rowKey.split('|'));
+          .filter(([rowKey, count]) => rowKey && count === files.length)
+          .map(([rowKey]) => rowKey.split('|'));
         
         consolidatedData = intersectRows;
       }
     } else {
       // Traditional consolidation method
       switch (options.method) {
-        case 'merge':
+        case 'merge': {
           files.forEach(file => {
             const alignedData = this.alignDataToHeaders(file, finalHeaders);
             consolidatedData.push(...alignedData);
           });
           break;
+        }
           
-        case 'union':
+        case 'union': {
           const seenRows = new Set<string>();
           files.forEach(file => {
             const alignedData = this.alignDataToHeaders(file, finalHeaders);
@@ -436,8 +440,9 @@ export class CSVProcessor {
             });
           });
           break;
+        }
           
-        case 'intersect':
+        case 'intersect': {
           if (files.length === 1) {
             consolidatedData = this.alignDataToHeaders(files[0], finalHeaders);
           } else {
@@ -457,12 +462,13 @@ export class CSVProcessor {
             });
             
             const intersectRows = Array.from(rowCounts.entries())
-              .filter(([_, count]) => count === files.length)
-              .map(([rowKey, _]) => rowKey.split('|'));
+              .filter(([rowKey, count]) => rowKey && count === files.length)
+              .map(([rowKey]) => rowKey.split('|'));
             
             consolidatedData = intersectRows;
           }
           break;
+        }
       }
     }
     

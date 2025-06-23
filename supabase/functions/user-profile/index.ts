@@ -89,13 +89,12 @@ Deno.serve(async (req: Request) => {
     // Get the authenticated user
     const {
       data: { user },
-      error: userError,
     } = await supabaseClient.auth.getUser();
 
-    if (userError || !user) {
-      console.error('Authentication error:', userError);
+    if (!user) {
+      console.error('Authentication error');
       return new Response(
-        JSON.stringify({ error: 'Unauthorized', details: userError?.message }),
+        JSON.stringify({ error: 'Unauthorized' }),
         {
           status: 401,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -110,7 +109,7 @@ Deno.serve(async (req: Request) => {
       if (bodyText) {
         requestBody = JSON.parse(bodyText);
       }
-    } catch (e) {
+    } catch {
       // If body parsing fails, continue with empty object
     }
 
@@ -118,27 +117,29 @@ Deno.serve(async (req: Request) => {
     const method = requestBody._method || req.method;
 
     switch (method) {
-      case 'GET':
+      case 'GET': {
         // Get user profile
-        const { data: profile, error: getError } = await supabaseClient
+        const { data: profile } = await supabaseClient
           .from('user_profiles')
           .select('*')
           .eq('id', user.id)
           .single();
 
-        if (getError && getError.code !== 'PGRST116') {
-          console.error('Error fetching profile:', getError);
-          throw getError;
+        if (!profile) {
+          console.error('Error fetching profile');
+          return new Response(
+            JSON.stringify({ error: 'Failed to fetch profile' }),
+            { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          );
         }
 
         return new Response(
-          JSON.stringify({ profile }),
-          {
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-          }
+          JSON.stringify({ profile: profile || null }),
+          { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
+      }
 
-      case 'POST':
+      case 'POST': {
         // Create or update user profile
         const profileData: UserProfileData = requestBody;
 
@@ -154,7 +155,7 @@ Deno.serve(async (req: Request) => {
           );
         }
 
-        const { data: upsertedProfile, error: upsertError } = await supabaseClient
+        const { data: upsertedProfile } = await supabaseClient
           .from('user_profiles')
           .upsert({
             id: user.id,
@@ -166,11 +167,6 @@ Deno.serve(async (req: Request) => {
           })
           .select()
           .single();
-
-        if (upsertError) {
-          console.error('Error upserting profile:', upsertError);
-          throw upsertError;
-        }
 
         // Create default subscription if it doesn't exist
         const { data: existingSubscription } = await supabaseClient
@@ -200,8 +196,9 @@ Deno.serve(async (req: Request) => {
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
           }
         );
+      }
 
-      case 'PUT':
+      case 'PUT': {
         // Update specific profile fields
         const updateData: Partial<UserProfileData> = requestBody;
         
@@ -224,17 +221,12 @@ Deno.serve(async (req: Request) => {
         if (updateData.kycVerified !== undefined) updateFields.kyc_verified = updateData.kycVerified;
         if (updateData.hasSeenOnboarding !== undefined) updateFields.has_seen_onboarding = updateData.hasSeenOnboarding;
 
-        const { data: updatedProfile, error: updateError } = await supabaseClient
+        const { data: updatedProfile } = await supabaseClient
           .from('user_profiles')
           .update(updateFields)
           .eq('id', user.id)
           .select()
           .single();
-
-        if (updateError) {
-          console.error('Error updating profile:', updateError);
-          throw updateError;
-        }
 
         return new Response(
           JSON.stringify({ profile: updatedProfile }),
@@ -242,24 +234,20 @@ Deno.serve(async (req: Request) => {
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
           }
         );
+      }
 
-      default:
+      default: {
         return new Response(
           JSON.stringify({ error: 'Method not allowed' }),
-          {
-            status: 405,
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-          }
+          { status: 405, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
-    }
-  } catch (error) {
-    console.error('Error in user-profile function:', error);
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      {
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       }
+    }
+  } catch {
+    console.error('Error in user-profile function');
+    return new Response(
+      JSON.stringify({ error: 'Internal server error' }),
+      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
 });

@@ -97,7 +97,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess }) => 
       }
 
       setResetEmailSent(true);
-    } catch (error) {
+    } catch {
       setErrors({ general: 'Failed to send reset email. Please try again.' });
     } finally {
       setIsLoading(false);
@@ -140,7 +140,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess }) => 
       }
       
       onClose();
-    } catch (error) {
+    } catch {
       setErrors({ general: 'An unexpected error occurred' });
     } finally {
       setIsLoading(false);

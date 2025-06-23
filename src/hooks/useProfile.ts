@@ -20,7 +20,7 @@ export const useProfile = () => {
     try {
       const { data, error } = await getProfile();
       if (error) throw error;
-      setProfile(data?.profile || null);
+      setProfile(data || null);
     } catch (error) {
       console.error('Error fetching profile:', error);
     } finally {
@@ -29,15 +29,23 @@ export const useProfile = () => {
   };
 
   const createProfile = async (profileData: {
-    firstName: string;
-    lastName: string;
-    email: string;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
     hasSeenOnboarding?: boolean;
   }) => {
     try {
-      const { data, error } = await createOrUpdateProfile(profileData);
+      // Use default values for required fields if not provided
+      const completeProfileData = {
+        firstName: profileData.firstName || 'User',
+        lastName: profileData.lastName || '',
+        email: profileData.email || user?.email || '',
+        hasSeenOnboarding: profileData.hasSeenOnboarding || false,
+      };
+      
+      const { data, error } = await createOrUpdateProfile(completeProfileData);
       if (error) throw error;
-      setProfile(data?.profile || null);
+      setProfile(data || null);
       return { data, error: null };
     } catch (error) {
       console.error('Error creating profile:', error);
@@ -48,13 +56,12 @@ export const useProfile = () => {
   const updateUserProfile = async (updates: Partial<{
     firstName: string;
     lastName: string;
-    email: string;
     hasSeenOnboarding: boolean;
   }>) => {
     try {
       const { data, error } = await updateProfile(updates);
       if (error) throw error;
-      setProfile(data?.profile || null);
+      setProfile(data || null);
       return { data, error: null };
     } catch (error) {
       console.error('Error updating profile:', error);

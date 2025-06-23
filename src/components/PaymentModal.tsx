@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { X, CreditCard, Zap, Crown, Check, Sparkles, ArrowRight, ExternalLink, AlertCircle } from 'lucide-react';
+import { X, CreditCard, Zap, Crown, Check, Sparkles, ExternalLink, AlertCircle } from 'lucide-react';
 import { useStripe } from '../hooks/useStripe';
 import { STRIPE_PRODUCTS } from '../lib/stripe';
 
 interface PaymentModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onPaymentSuccess: (type: 'subscription' | 'single') => void;
   downloadCount: number;
   userEmail?: string;
   userName?: string;
@@ -15,7 +14,6 @@ interface PaymentModalProps {
 const PaymentModal: React.FC<PaymentModalProps> = ({ 
   isOpen, 
   onClose, 
-  onPaymentSuccess, 
   downloadCount,
   userEmail,
   userName
@@ -39,7 +37,6 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
       // Success handling will happen via webhook and URL parameters
       
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred';
       console.error('Stripe checkout error:', err);
       // Error is already set by the hook
     }

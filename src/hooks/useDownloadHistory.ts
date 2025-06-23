@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getDownloadHistory, recordDownload } from '../lib/supabase';
 import { useAuth } from './useAuth';
 
@@ -24,7 +24,7 @@ export const useDownloadHistory = () => {
     totalPages: 0
   });
 
-  const fetchDownloads = async (page = 1, limit = 10) => {
+  const fetchDownloads = useCallback(async (page = 1, limit = 10) => {
     if (!user) return;
     
     setLoading(true);
@@ -32,14 +32,14 @@ export const useDownloadHistory = () => {
       const { data, error } = await getDownloadHistory(page, limit);
       if (error) throw error;
       
-      setDownloads(data?.downloads || []);
-      setPagination(data?.pagination || { page: 1, limit: 10, total: 0, totalPages: 0 });
+      setDownloads((data as DownloadHistoryItem[]) || []);
+      setPagination({ page, limit, total: data?.length || 0, totalPages: Math.ceil((data?.length || 0) / limit) });
     } catch (error) {
       console.error('Failed to fetch download history:', error);
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
 
   const addDownload = async (downloadData: {
     fileName: string;
@@ -72,7 +72,7 @@ export const useDownloadHistory = () => {
       setDownloads([]);
       setPagination({ page: 1, limit: 10, total: 0, totalPages: 0 });
     }
-  }, [user]);
+  }, [user, fetchDownloads]);
 
   return {
     downloads,

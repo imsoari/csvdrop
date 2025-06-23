@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sparkles, Upload, Settings, Download, CheckCircle, Crown, Zap, Star, ArrowRight, Users, Shield, Clock, BarChart3, Layers, Filter } from 'lucide-react';
+import { Sparkles, Upload, Settings, Download, CheckCircle, Crown, Zap, ArrowRight, Users, Shield, Clock, BarChart3, Layers, Filter } from 'lucide-react';
 import Navbar from './Navbar';
 import Footer from './Footer';
 

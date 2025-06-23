@@ -23,7 +23,7 @@ const MOCK_USERS = [
 const LOCAL_STORAGE_KEY = 'csvdrop-mock-auth-user';
 
 // Mock authentication methods
-export const mockSignIn = async (email: string, password: string) => {
+export const mockSignIn = async (email: string) => {
   // For demo purposes, any password works for mock users
   const user = MOCK_USERS.find(u => u.email.toLowerCase() === email.toLowerCase());
   
@@ -38,7 +38,7 @@ export const mockSignIn = async (email: string, password: string) => {
   };
 };
 
-export const mockSignUp = async (email: string, password: string) => {
+export const mockSignUp = async (email: string) => {
   // Check if user already exists
   const existingUser = MOCK_USERS.find(u => u.email.toLowerCase() === email.toLowerCase());
   
@@ -52,14 +52,11 @@ export const mockSignUp = async (email: string, password: string) => {
   // Create new mock user
   const newUser = {
     id: `mock-user-${Date.now()}`,
-    email: email,
+    email: email.toLowerCase(),
     created_at: new Date().toISOString(),
   };
   
-  // Add to mock users array
   MOCK_USERS.push(newUser);
-  
-  // Set as current user
   localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newUser));
   
   return { data: { user: newUser }, error: null };
@@ -107,9 +104,28 @@ export const triggerAuthChange = (event: string, user: User | null) => {
 export const mockSupabase = {
   auth: {
     onAuthStateChange: mockAuthStateChange,
-    getUser: mockGetCurrentUser,
-    signUp: mockSignUp,
-    signIn: mockSignIn,
-    signOut: mockSignOut
+    getUser: () => Promise.resolve({ user: mockGetCurrentUser() }),
+    signUp: (email: string) => mockSignUp(email),
+    signIn: (email: string) => mockSignIn(email),
+    signInWithPassword: ({ email }: { email: string }) => mockSignIn(email),
+    resetPasswordForEmail: (email: string) => {
+      console.log('Mock password reset for:', email);
+      return Promise.resolve({ data: null, error: null });
+    },
+    getSession: async () => {
+      const userResult = await mockGetCurrentUser();
+      const user = userResult.user;
+      return { 
+        data: { session: user ? { user } : null }, 
+        error: null 
+      };
+    },
+    signOut: () => mockSignOut(),
+  },
+  functions: {
+    invoke: (functionName: string, options?: Record<string, unknown>) => {
+      console.log('Mock function call:', functionName, options);
+      return Promise.resolve({ data: null, error: null });
+    }
   }
 };

@@ -7,21 +7,16 @@ import {
   FileText, 
   Calendar, 
   Mail, 
-  Shield, 
   LogOut,
   Edit3,
   Check,
   X,
-  AlertCircle,
   TrendingUp,
   Clock,
   Archive,
   ChevronRight,
-  BarChart3,
-  Layers,
   Zap,
   Upload,
-  Plus,
   ArrowRight
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
@@ -36,11 +31,11 @@ interface DashboardProps {
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ onLogout, onStartProcessing }) => {
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
   const { profile, loading: profileLoading, updateProfile } = useProfile();
   const { subscription, loading: subscriptionLoading } = useSubscription();
   const { createPortalSession, loading: stripeLoading } = useStripe();
-  const { downloads, loading: historyLoading, fetchDownloads } = useDownloadHistory();
+  const { downloads, loading: historyLoading } = useDownloadHistory();
   
   const [activeTab, setActiveTab] = useState<'overview' | 'profile' | 'downloads' | 'billing'>('overview');
   const [isEditing, setIsEditing] = useState(false);
@@ -73,8 +68,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout, onStartProcessing }) =>
     try {
       await updateProfile({
         firstName: editForm.firstName,
-        lastName: editForm.lastName,
-        email: editForm.email
+        lastName: editForm.lastName
       });
       setIsEditing(false);
     } catch (error) {
@@ -198,19 +192,6 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout, onStartProcessing }) =>
                         {profile?.first_name} {profile?.last_name}
                       </h3>
                       <p className="text-white/70 font-light">{profile?.email}</p>
-                      <div className="flex items-center gap-2 mt-2">
-                        {profile?.kyc_verified ? (
-                          <>
-                            <Shield className="w-4 h-4 text-emerald-400" />
-                            <span className="text-xs text-emerald-400 font-black uppercase tracking-wider">VERIFIED</span>
-                          </>
-                        ) : (
-                          <>
-                            <AlertCircle className="w-4 h-4 text-amber-400" />
-                            <span className="text-xs text-amber-400 font-black uppercase tracking-wider">PENDING</span>
-                          </>
-                        )}
-                      </div>
                     </div>
                   </div>
 
@@ -220,7 +201,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout, onStartProcessing }) =>
                       return (
                         <button
                           key={tab.id}
-                          onClick={() => setActiveTab(tab.id as any)}
+                          onClick={() => setActiveTab(tab.id as 'overview' | 'profile' | 'downloads' | 'billing')}
                           className={`w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all duration-300 text-left group ${
                             activeTab === tab.id
                               ? `bg-gradient-to-r ${tab.gradient} text-white shadow-2xl transform scale-105`
@@ -360,7 +341,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout, onStartProcessing }) =>
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="text-purple-200 text-sm font-light uppercase tracking-wider">FILES PROCESSED</p>
-                          <p className="text-3xl font-black">{downloads.length}</p>
+                          <p className="text-3xl font-black text-white">{downloads.length}</p>
                         </div>
                         <FileText className="w-12 h-12 text-purple-300" />
                       </div>
@@ -533,23 +514,6 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout, onStartProcessing }) =>
                         </div>
 
                         <div className="p-6 bg-white/5 backdrop-blur-2xl rounded-2xl border border-white/10">
-                          <label className="block text-sm font-black text-white/60 mb-2 uppercase tracking-wider">Verification Status</label>
-                          <div className="flex items-center gap-3">
-                            {profile?.kyc_verified ? (
-                              <>
-                                <Shield className="w-6 h-6 text-emerald-400" />
-                                <span className="text-2xl font-black text-emerald-400">VERIFIED</span>
-                              </>
-                            ) : (
-                              <>
-                                <AlertCircle className="w-6 h-6 text-amber-400" />
-                                <span className="text-2xl font-black text-amber-400">PENDING VERIFICATION</span>
-                              </>
-                            )}
-                          </div>
-                        </div>
-
-                        <div className="p-6 bg-white/5 backdrop-blur-2xl rounded-2xl border border-white/10">
                           <label className="block text-sm font-black text-white/60 mb-2 uppercase tracking-wider">Member Since</label>
                           <div className="flex items-center gap-3">
                             <Calendar className="w-6 h-6 text-white/60" />
@@ -580,7 +544,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout, onStartProcessing }) =>
                   <div className="p-8">
                     {historyLoading ? (
                       <div className="text-center py-16">
-                        <div className="animate-spin rounded-full h-12 w-12 border-4 border-white/20 border-t-white mx-auto mb-6"></div>
+                        <div className="animate-spin rounded-full h-12 w-12 border-3 border-white border-t-transparent"></div>
                         <p className="text-white/70 font-light">LOADING DOWNLOAD HISTORY...</p>
                       </div>
                     ) : downloads.length > 0 ? (

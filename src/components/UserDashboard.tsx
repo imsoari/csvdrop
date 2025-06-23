@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Upload, Download, Settings, Sparkles, CheckCircle, AlertCircle, Crown, Zap, BarChart3, Layers } from 'lucide-react';
+import { Upload, Download, CheckCircle, AlertCircle, BarChart3, Layers } from 'lucide-react';
 import { CSVFile, CSVProcessor, ConsolidationOptions, ConsolidationResult } from '../utils/csvProcessor';
 import { useAuth } from '../hooks/useAuth';
 import { useProfile } from '../hooks/useProfile';

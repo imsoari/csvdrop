@@ -5,19 +5,13 @@ import '../styles/macintosh.css';
 interface MacAuthModalProps {
   isOpen: boolean;
   onClose: () => void;
-  playSuccess?: () => void;
-  playError?: () => void;
-  playClick?: () => void;
 }
 
 const MacAuthModal: React.FC<MacAuthModalProps> = ({ 
   isOpen, 
-  onClose,
-  playSuccess,
-  playError,
-  playClick
+  onClose
 }) => {
-  const { signIn, signUp, currentUser } = useAuth();
+  const { login, register, user } = useAuth();
   const [isSignIn, setIsSignIn] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -27,14 +21,14 @@ const MacAuthModal: React.FC<MacAuthModalProps> = ({
   
   // Close modal if user is already authenticated
   useEffect(() => {
-    if (currentUser) {
+    if (user) {
       setSuccessMessage('Successfully authenticated!');
       setTimeout(() => {
         onClose();
         setSuccessMessage('');
       }, 1500);
     }
-  }, [currentUser, onClose]);
+  }, [user, onClose]);
 
   if (!isOpen) return null;
   
@@ -44,13 +38,11 @@ const MacAuthModal: React.FC<MacAuthModalProps> = ({
     // Basic validation
     if (!email || !password) {
       setError('Please fill in all fields.');
-      playError?.();
       return;
     }
     
     if (password.length < 6) {
       setError('Password must be at least 6 characters.');
-      playError?.();
       return;
     }
     
@@ -60,13 +52,11 @@ const MacAuthModal: React.FC<MacAuthModalProps> = ({
     
     try {
       if (isSignIn) {
-        await signIn(email, password);
+        await login(email, password);
         setSuccessMessage('Sign in successful!');
-        playSuccess?.();
       } else {
-        await signUp(email, password);
+        await register(email, password);
         setSuccessMessage('Account created successfully!');
-        playSuccess?.();
       }
       
       // Don't close immediately - show success message first
@@ -77,25 +67,24 @@ const MacAuthModal: React.FC<MacAuthModalProps> = ({
         setEmail('');
         setPassword('');
       }, 1500);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Authentication error:', err);
       
       // More specific error messages
-      if (err.message?.includes('invalid-email')) {
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      if (errorMessage?.includes('invalid-email')) {
         setError('Invalid email format. Please check and try again.');
-      } else if (err.message?.includes('wrong-password') || err.message?.includes('invalid-credential')) {
+      } else if (errorMessage?.includes('wrong-password') || errorMessage?.includes('invalid-credential')) {
         setError('Incorrect email or password. Please try again.');
-      } else if (err.message?.includes('user-not-found')) {
+      } else if (errorMessage?.includes('user-not-found')) {
         setError('Account not found. Please sign up instead.');
-      } else if (err.message?.includes('email-already-in-use')) {
+      } else if (errorMessage?.includes('email-already-in-use')) {
         setError('Email is already in use. Try signing in instead.');
-      } else if (err.message?.includes('network-request-failed')) {
+      } else if (errorMessage?.includes('network-request-failed')) {
         setError('Network error. Please check your connection and try again.');
       } else {
         setError('Authentication failed. Please check your credentials and try again.');
       }
-      
-      playError?.();
     } finally {
       setLoading(false);
     }
@@ -104,7 +93,6 @@ const MacAuthModal: React.FC<MacAuthModalProps> = ({
   const toggleAuthMode = () => {
     setIsSignIn(!isSignIn);
     setError('');
-    playClick?.();
   };
   
   return (
@@ -186,7 +174,6 @@ const MacAuthModal: React.FC<MacAuthModalProps> = ({
             onClick={() => {
               if (!loading && successMessage === '') {
                 onClose();
-                playClick?.();
                 // Reset form on cancel
                 setEmail('');
                 setPassword('');

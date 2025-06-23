@@ -2,6 +2,13 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Share2, Copy, Check, Twitter, Facebook, Linkedin, X } from 'lucide-react';
 
 interface ShareButtonProps {
+  downloadTicket: {
+    fileName: string;
+    ticketNumber: string;
+    downloadType: 'consolidated' | 'original' | 'preview';
+    rowCount: number;
+    columnCount: number;
+  };
   url?: string;
   title?: string;
   description?: string;
@@ -44,7 +51,7 @@ const ShareButton: React.FC<ShareButtonProps> = ({
       try {
         await navigator.share(shareData);
       } catch (error) {
-        if (error instanceof Error && error.name !== 'AbortError') {
+        if ((error as Error).name !== 'AbortError') {
           console.log('Share failed, showing menu');
           setShowShareMenu(true);
         }
@@ -59,7 +66,7 @@ const ShareButton: React.FC<ShareButtonProps> = ({
       await navigator.clipboard.writeText(url);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch (error) {
+    } catch {
       // Fallback for older browsers
       const textArea = document.createElement('textarea');
       textArea.value = url;

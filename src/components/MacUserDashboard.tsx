@@ -8,7 +8,13 @@ import '../styles/mac-dashboard.css';
 
 interface MacUserDashboardProps {
   onShowPayment: () => void;
-  onShowDownloadTicket: (data: { downloadType: string; ticketNumber: string }) => void;
+  onShowDownloadTicket: (data: { 
+    fileName: string; 
+    rowCount: number; 
+    columnCount: number; 
+    downloadType: 'free' | 'pro' | 'single'; 
+    ticketNumber: string; 
+  }) => void;
 }
 
 const MacUserDashboard: React.FC<MacUserDashboardProps> = ({ onShowPayment, onShowDownloadTicket }) => {
@@ -93,6 +99,9 @@ const MacUserDashboard: React.FC<MacUserDashboardProps> = ({ onShowPayment, onSh
       
       // Show download ticket
       onShowDownloadTicket({
+        fileName: selectedFile.name,
+        rowCount: 100, // Replace with actual row count
+        columnCount: 10, // Replace with actual column count
         downloadType: subscription?.type || 'free',
         ticketNumber
       });

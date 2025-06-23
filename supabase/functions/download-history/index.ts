@@ -85,7 +85,7 @@ Deno.serve(async (req: Request) => {
       if (bodyText) {
         requestBody = JSON.parse(bodyText);
       }
-    } catch (e) {
+    } catch {
       // If body parsing fails, continue with empty object
     }
 
@@ -94,7 +94,7 @@ Deno.serve(async (req: Request) => {
     const url = new URL(req.url);
 
     switch (method) {
-      case 'GET':
+      case 'GET': {
         // Get download history with pagination
         const page = parseInt(requestBody.page || url.searchParams.get('page') || '1');
         const limit = parseInt(requestBody.limit || url.searchParams.get('limit') || '10');
@@ -125,8 +125,9 @@ Deno.serve(async (req: Request) => {
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
           }
         );
+      }
 
-      case 'POST':
+      case 'POST': {
         // Record a new download
         const downloadData: DownloadData = requestBody;
 
@@ -167,8 +168,9 @@ Deno.serve(async (req: Request) => {
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
           }
         );
+      }
 
-      default:
+      default: {
         return new Response(
           JSON.stringify({ error: 'Method not allowed' }),
           {
@@ -176,15 +178,13 @@ Deno.serve(async (req: Request) => {
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
           }
         );
-    }
-  } catch (error) {
-    console.error('Error in download-history function:', error);
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      {
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       }
+    }
+  } catch {
+    console.error('Error in download-history function');
+    return new Response(
+      JSON.stringify({ error: 'Internal server error' }),
+      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
 });

@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { mockSupabase, mockSignIn, mockSignUp, mockSignOut, mockGetCurrentUser } from './mockAuth';
 
 // Get environment variables
@@ -17,7 +17,7 @@ if (typeof window !== 'undefined') {
 }
 
 // Create client based on environment
-let supabaseClient: any;
+let supabaseClient: SupabaseClient | typeof mockSupabase;
 
 if (useMockAuth) {
   console.log('🔧 Using mock authentication for development');
@@ -82,17 +82,12 @@ export interface DownloadHistory {
 const withErrorHandling = async <T>(operation: () => Promise<T>, operationName: string): Promise<T> => {
   try {
     return await operation();
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(`Error in ${operationName}:`, error);
     
     // Check if it's a network error
     if (error instanceof TypeError && error.message.includes('fetch')) {
-      throw new Error(`Network error during ${operationName}. Please check your internet connection and Supabase configuration.`);
-    }
-    
-    // Check if it's a Supabase configuration error
-    if (error instanceof Error && error.message.includes('Invalid API key')) {
-      throw new Error(`Supabase configuration error. Please check your API keys.`);
+      throw new Error('Network error: Please check your connection');
     }
     
     throw error;
@@ -102,7 +97,7 @@ const withErrorHandling = async <T>(operation: () => Promise<T>, operationName: 
 // Auth helpers with enhanced error handling
 export const signUp = async (email: string, password: string) => {
   if (useMockAuth) {
-    return mockSignUp(email, password);
+    return mockSignUp(email);
   }
   
   return withErrorHandling(
@@ -110,10 +105,13 @@ export const signUp = async (email: string, password: string) => {
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          emailRedirectTo: 'https://example.com/welcome',
+        },
       });
       
       if (error) throw error;
-      return { data, error: null };
+      return data;
     },
     'signUp'
   );
@@ -121,7 +119,7 @@ export const signUp = async (email: string, password: string) => {
 
 export const signIn = async (email: string, password: string) => {
   if (useMockAuth) {
-    return mockSignIn(email, password);
+    return mockSignIn(email);
   }
   
   return withErrorHandling(
@@ -132,7 +130,7 @@ export const signIn = async (email: string, password: string) => {
       });
       
       if (error) throw error;
-      return { data, error: null };
+      return data;
     },
     'signIn'
   );
@@ -166,7 +164,7 @@ export const getCurrentUser = async () => {
         if (data?.session?.user) {
           return { user: data.session.user };
         }
-      } catch (e) {
+      } catch {
         console.warn('Could not get session, falling back to getUser');
       }
       
@@ -205,10 +203,19 @@ export const createOrUpdateProfile = async (profileData: {
   lastName: string;
   email: string;
   hasSeenOnboarding?: boolean;
-}) => {
+}): Promise<{ data: UserProfile | null, error: any }> => {
   // In mock mode, just return success
   if (useMockAuth) {
-    return { data: { id: 'mock-profile-id', ...profileData }, error: null };
+    const mockProfile: UserProfile = {
+      id: 'mock-profile-id',
+      first_name: profileData.firstName,
+      last_name: profileData.lastName,
+      email: profileData.email,
+      has_seen_onboarding: profileData.hasSeenOnboarding || false,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+    return { data: mockProfile, error: null };
   }
   
   // Real implementation would go here
@@ -218,12 +225,20 @@ export const createOrUpdateProfile = async (profileData: {
 export const updateProfile = async (updates: Partial<{
   firstName: string;
   lastName: string;
-  email: string;
   hasSeenOnboarding: boolean;
-}>) => {
+}>): Promise<{ data: UserProfile | null, error: any }> => {
   // In mock mode, just return success
   if (useMockAuth) {
-    return { data: { id: 'mock-profile-id', ...updates }, error: null };
+    const mockProfile: UserProfile = {
+      id: 'mock-profile-id',
+      first_name: updates.firstName || 'User',
+      last_name: updates.lastName || '',
+      email: 'mock@example.com',
+      has_seen_onboarding: updates.hasSeenOnboarding || false,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+    return { data: mockProfile, error: null };
   }
   
   // Real implementation would go here

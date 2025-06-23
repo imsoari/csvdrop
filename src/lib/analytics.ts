@@ -1,8 +1,4 @@
-// Analytics and monitoring utilities
-interface AnalyticsEvent {
-  event: string;
-  properties?: Record<string, any>;
-}
+// Analytics utilities for tracking user interactions and events
 
 class Analytics {
   private static instance: Analytics;
@@ -41,11 +37,13 @@ class Analytics {
     document.head.appendChild(script);
 
     // Initialize gtag
-    (window as any).dataLayer = (window as any).dataLayer || [];
-    function gtag(...args: any[]) {
-      (window as any).dataLayer.push(args);
+    (window as unknown as { dataLayer: unknown[]; gtag: (...args: unknown[]) => void }).dataLayer = 
+      (window as unknown as { dataLayer: unknown[] }).dataLayer || [];
+    
+    function gtag(...args: unknown[]) {
+      (window as unknown as { dataLayer: unknown[] }).dataLayer.push(args);
     }
-    (window as any).gtag = gtag;
+    (window as unknown as { gtag: (...args: unknown[]) => void }).gtag = gtag;
 
     gtag('js', new Date());
     gtag('config', gaId);
@@ -56,10 +54,11 @@ class Analytics {
     console.log('Sentry DSN configured:', dsn);
   }
 
-  track(event: string, properties?: Record<string, any>) {
+  track(event: string, properties?: Record<string, unknown>) {
     // Track with Google Analytics
-    if ((window as any).gtag) {
-      (window as any).gtag('event', event, properties);
+    const windowWithGtag = window as unknown as { gtag?: (...args: unknown[]) => void };
+    if (windowWithGtag.gtag) {
+      windowWithGtag.gtag('event', event, properties);
     }
 
     // Track with custom analytics
@@ -67,14 +66,15 @@ class Analytics {
   }
 
   trackPageView(path: string) {
-    if ((window as any).gtag) {
-      (window as any).gtag('config', import.meta.env.VITE_GOOGLE_ANALYTICS_ID, {
+    const windowWithGtag = window as unknown as { gtag?: (...args: unknown[]) => void };
+    if (windowWithGtag.gtag) {
+      windowWithGtag.gtag('config', import.meta.env.VITE_GOOGLE_ANALYTICS_ID, {
         page_path: path,
       });
     }
   }
 
-  trackError(error: Error, context?: Record<string, any>) {
+  trackError(error: Error, context?: Record<string, unknown>) {
     console.error('Application Error:', error, context);
     
     // Track error with analytics

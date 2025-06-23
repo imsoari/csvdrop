@@ -6,7 +6,7 @@ import { StripeProductType } from '../lib/stripe';
 interface MacPaymentModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onPaymentSuccess?: (data: any) => void;
+  onPaymentSuccess?: (data: Record<string, unknown>) => void;
   downloadCount?: number;
   userEmail?: string;
   userName?: string;
