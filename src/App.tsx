@@ -129,6 +129,15 @@ function App() {
     }
   }, [subscription?.type]);
 
+  // Clear localStorage for debugging on app load
+  useEffect(() => {
+    // Clear any stored profile data that might interfere with landing page
+    if (window.location.search.includes('debug=true')) {
+      localStorage.clear();
+      console.log('Debug mode: localStorage cleared');
+    }
+  }, []);
+
   const handleAuthSuccess = () => {
     setShowAuthModal(false);
     playSuccess();
@@ -177,7 +186,15 @@ function App() {
   }
 
   // Determine which page to show
-  const shouldShowDashboard = (user && profile) || profile?.has_seen_onboarding;  // Allow access after onboarding, even without auth
+  const shouldShowDashboard = (user && profile) || (profile?.has_seen_onboarding && user);  // Only show dashboard if user is authenticated AND has seen onboarding
+  
+  // Debug logging
+  console.log('App state:', { 
+    user: !!user, 
+    profile: !!profile, 
+    hasSeenOnboarding: profile?.has_seen_onboarding,
+    shouldShowDashboard 
+  });
 
   return (
     <Router>

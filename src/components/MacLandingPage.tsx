@@ -39,6 +39,20 @@ const MacLandingPage: React.FC<MacLandingPageProps> = ({ onShowAuth, onShowPayme
 
   // Window state management
   const [activeWindows, setActiveWindows] = useState<string[]>(['welcome']);
+  
+  // Debug logging
+  useEffect(() => {
+    console.log('MacLandingPage: activeWindows:', activeWindows);
+  }, [activeWindows]);
+  
+  // Ensure welcome window is always open initially
+  useEffect(() => {
+    if (!activeWindows.includes('welcome')) {
+      console.log('MacLandingPage: Adding welcome window back');
+      setActiveWindows(prev => [...prev, 'welcome']);
+    }
+  }, []);
+  
   const [windowPositions, setWindowPositions] = useState<WindowPosition[]>([]);
   
   // Initialize window positions based on screen size
@@ -522,12 +536,13 @@ const MacLandingPage: React.FC<MacLandingPageProps> = ({ onShowAuth, onShowPayme
       
       {activeWindows.includes('welcome') && (
         <div 
-          className="mac-desktop-window" 
+          className="mac-window absolute bg-gray-100 shadow-lg" 
           style={{
-            top: `${windowPositions.find((w: WindowPosition) => w.id === 'welcome')?.top}px`,
-            left: `${windowPositions.find((w: WindowPosition) => w.id === 'welcome')?.left}px`,
-            width: `${windowPositions.find((w: WindowPosition) => w.id === 'welcome')?.width}px`,
-            zIndex: windowPositions.find((w: WindowPosition) => w.id === 'welcome')?.zIndex
+            top: `${windowPositions.find((w: WindowPosition) => w.id === 'welcome')?.top || 100}px`,
+            left: `${windowPositions.find((w: WindowPosition) => w.id === 'welcome')?.left || 250}px`,
+            width: `${windowPositions.find((w: WindowPosition) => w.id === 'welcome')?.width || 500}px`,
+            zIndex: windowPositions.find((w: WindowPosition) => w.id === 'welcome')?.zIndex || 1000,
+            minHeight: '300px'
           }}
         >
           <div 
