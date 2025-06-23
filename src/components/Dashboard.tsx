@@ -26,11 +26,13 @@ import { useStripe } from '../hooks/useStripe';
 import { useDownloadHistory } from '../hooks/useDownloadHistory';
 
 interface DashboardProps {
-  onLogout: () => void;
+  onLogout?: () => void;
   onStartProcessing?: () => void; // New prop to handle navigation to processing
+  isTrialMode?: boolean; // New prop to indicate trial/demo mode
+  onUpgrade?: () => void; // New prop to trigger upgrade modal
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ onLogout, onStartProcessing }) => {
+const Dashboard: React.FC<DashboardProps> = ({ onLogout, onStartProcessing, isTrialMode, onUpgrade }) => {
   const { logout } = useAuth();
   const { profile, loading: profileLoading, updateProfile } = useProfile();
   const { subscription, loading: subscriptionLoading } = useSubscription();
@@ -58,7 +60,7 @@ const Dashboard: React.FC<DashboardProps> = ({ onLogout, onStartProcessing }) =>
   const handleLogout = async () => {
     try {
       await logout();
-      onLogout();
+      onLogout?.();
     } catch (error) {
       console.error('Logout failed:', error);
     }
